@@ -1,0 +1,65 @@
+<div fxFlexFill fxLayout="column" fxLayoutAlign="start center">
+  <img
+    ngClass="logo"
+    ngClass.xs="logo-xs"
+    src="../../assets/images/logo/logo-gray.png"
+    alt="todaslasfarmacias.com"
+  />
+  <div class="logo-text-container" fxLayout fxLayoutAlign="null center">
+    <span ngClass="logo-text" ngClass.xs="logo-text-xs"
+      >todaslasfarmacias.com</span
+    >
+  </div>
+  <div
+    ngClass.gt-xs="logo-subtext-container"
+    fxLayout
+    fxLayoutAlign="null center"
+  >
+    <p ngClass="log-subtext-a" fxHide.xs>más de</p>
+    <p ngClass.xs="log-subtext-a-xs" fxHide.gt-xs>+</p>
+    <p ngClass="log-subtext-b" ngClass.xs="log-subtext-b-xs">100,000</p>
+    <p ngClass="log-subtext-c" ngClass.xs="log-subtext-c-xs">
+      medicamentos en un solo lugar
+    </p>
+  </div>
+
+  <div
+    ngClass="searchbar-container"
+    ngClass.xs="searchbar-container-xs"
+    fxLayout
+    fxLayoutAlign="start center"
+  >
+    <img
+      ngClass="search-icon"
+      ngClass.xs="search-icon-xs"
+      src="../../assets/images/search-outline-gray.svg"
+    />
+    <input
+      ngClass="search-input"
+      ngClass.xs="search-input-xs"
+      matInput
+      type="text"
+      [(ngModel)]="userInput"
+      placeholder="ejemplo: Ibuprofeno"
+      (keyup.enter)="onSearch()"
+    />
+    <button
+      ngClass="search-button"
+      ngClass.xs="search-button-xs"
+      mat-raised-button
+      (click)="onSearch()"
+    >
+      Buscar
+    </button>
+  </div>
+  <div
+    ngClass="bottom-text-container"
+    ngClass.xs="bottom-text-container-xs"
+    fxLayout
+    fxLayoutAlign="center center"
+  >
+    <p ngClass="bottom-text" ngClass.xs="bottom-text-xs">
+      Encuentra el mejor precio ahora!
+    </p>
+  </div>
+</div>

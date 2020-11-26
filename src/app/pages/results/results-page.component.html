@@ -1,0 +1,365 @@
+<div fxHide.gt-xs id="main-container-xs" fxFlex fxLayout="column">
+  <div
+    ngClass="top-bar"
+    ngClass.xs="top-bar-xs"
+    fxLayoutAlign="space-between center"
+  >
+    <span
+      fxShow.xs
+      id="logo-text-xs"
+      fxFlex
+      fxFlexAlign="center"
+      routerLink="/home-page"
+      >todaslasfarmacias.com</span
+    >
+    <img
+      fxHide.xs
+      ngClass="logo"
+      src="../../assets/images/logo/logo-yellow.png"
+      alt="todaslasfarmacias.com"
+      routerLink="/home-page"
+    />
+    <div
+      fxHide.xs
+      ngClass="searchbar-container"
+      ngClass.xs="searchbar-container-xs"
+      fxLayout
+      fxLayoutAlign="start center"
+    >
+      <img
+        ngClass="search-icon"
+        ngClass.xs="search-icon-xs"
+        src="../../assets/images/search-outline-gray.svg"
+      />
+      <input
+        ngClass="search-input"
+        ngClass.xs="search-input-xs"
+        matInput
+        type="text"
+        [(ngModel)]="userInputLocal"
+        placeholder="ejemplo: Ibuprofeno"
+        (keyup.enter)="onSearch()"
+      />
+      <button
+        ngClass="search-button"
+        ngClass.xs="search-button-xs"
+        mat-raised-button
+        (click)="onSearch()"
+      >
+        Buscar
+      </button>
+    </div>
+    <div fxHide.xs style="width: 86px; height: 86px; margin-left: 32px"></div>
+  </div>
+
+  <div style="height: 70px"></div>
+
+  <div
+    fxShow.xs
+    fxHide.gt-xs
+    ngClass="searchbar-container"
+    ngClass.xs="searchbar-container-xs"
+    fxLayout
+    fxLayoutAlign="center start"
+  >
+    <div id="searchbar-wrapper" fxLayout="column" fxLayoutAlign="start center">
+      <div>
+        <img
+          ngClass="search-icon"
+          ngClass.xs="search-icon-xs"
+          src="../../assets/images/search-outline-gray.svg"
+        />
+        <input
+          ngClass="search-input"
+          ngClass.xs="search-input-xs"
+          matInput
+          type="text"
+          [(ngModel)]="userInputLocal"
+          placeholder="ejemplo: Ibuprofeno"
+          (keyup.enter)="onSearch()"
+        />
+        <button
+          ngClass="search-button"
+          ngClass.xs="search-button-xs"
+          mat-raised-button
+          (click)="onSearch()"
+        >
+          Buscar
+        </button>
+      </div>
+
+      <div id="actions-wrapper-xs" fxLayoutAlign="space-between end">
+        <span class="buscando-text-xs"
+          >Buscando:
+          <span style="font-weight: 800">"{{ userInput }}"</span></span
+        >
+        <div fxLayout>
+          <span class="ordenar-text-xs">Ordenar:</span>
+          <button id="caret-button" mat-icon-button>
+            <mat-icon (click)="onSortProducts()">{{
+              lowerToHigherPrice ? "arrow_drop_up" : "arrow_drop_down"
+            }}</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="add-container-xs" fxFlex fxLayoutAlign="center center">
+    <img
+      src="../../../assets/images/top-banner-add-xs.png"
+      style="height: 50px; width: 320px; margin: 12px"
+    />
+  </div>
+
+  <div
+    *ngIf="isLoading"
+    id="spinner-container"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    style="height: 100%; width: 100%; margin-top: 32%"
+  >
+    <div id="spinner-wrapper">
+      <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && products.length > 0" id="card-wrapper-xs">
+    <div id="card-xs" fxLayout *ngFor="let product of products">
+      <a
+        fxFlex
+        [href]="product.link"
+        target="_blank"
+        style="text-decoration: none"
+      >
+        <div
+          id="product-image-wrapper-xs"
+          fxLayout="column"
+          fxLayoutAlign="start center"
+        >
+          <img
+            src="{{ vendorLogoCheck(product.vendor) }}"
+            style="height: 15px; left: 11px; margin-top: 2px"
+          />
+          <img id="product-image-xs" src="{{ product.image }}" />
+        </div>
+        <div fxFlex fxLayout="column">
+          <span id="product-name-xs">{{ product.name }}</span>
+          <div fxFlex fxLayoutAlign="space-between end">
+            <span id="inapam-descount-xs">{{
+              discountCheckXs(product.vendor)
+            }}</span>
+            <span id="product-price-xs"
+              >{{ product.price | currency }} MXN</span
+            >
+          </div>
+        </div>
+      </a>
+    </div>
+    <div
+      fxLayoutAlign="center"
+      style="margin-top: 40px; margin-bottom: 40px; width: 100%"
+    >
+      <button
+        *ngIf="!noMore"
+        id="mas-resultados-button-xs"
+        mat-button
+        (click)="onPagination()"
+        [disabled]="noMore"
+      >
+        Más resultados
+      </button>
+      <span *ngIf="noMore" id="fin-de-resultados-xs">Fin de resultados</span>
+    </div>
+  </div>
+
+  <button
+    id="scroll-top-fab"
+    mat-fab
+    aria-label="Arriba"
+    (click)="scrollToTop()"
+  >
+    <mat-icon>arrow_upward</mat-icon>
+  </button>
+</div>
+
+<!-- Desktop -->
+
+<div
+  fxHide.xs
+  id="body-container"
+  fxFlexFill
+  fxLayout="column"
+  fxLayoutAlign="center center"
+>
+  <div ngClass="top-bar" fxLayoutAlign="space-between center">
+    <img
+      ngClass="logo"
+      src="../../assets/images/logo/logo-gray.png"
+      alt="todaslasfarmacias.com"
+      routerLink="/home-page"
+    />
+    <div ngClass="searchbar-container" fxLayout fxLayoutAlign="start center">
+      <img
+        ngClass="search-icon"
+        src="../../assets/images/search-outline-gray.svg"
+      />
+      <input
+        ngClass="search-input"
+        ngClass.lt-md="search-input-md"
+        matInput
+        type="text"
+        [(ngModel)]="userInputLocal"
+        placeholder="ejemplo: Ibuprofeno"
+        (keyup.enter)="onSearch()"
+      />
+      <!-- <button *ngIf="userInput.length > 0" id="close-icon" mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button> -->
+      <button id="search-button" mat-raised-button (click)="onSearch()">
+        Buscar
+      </button>
+    </div>
+    <div style="width: 86px; height: 86px; margin-left: 32px"></div>
+  </div>
+
+  <div>
+    <div fxLayout fxLayoutAlign="center center">
+      <div
+        class="results-caption-container"
+        fxLayout="row"
+        fxLayoutAlign="space-between"
+      >
+        <div fxLayout>
+          <p *ngIf="!userInput" class="mostrando-resultados-para-a">
+            Encuetra el mejor precio:
+          </p>
+          <p *ngIf="userInput" class="mostrando-resultados-para-a">
+            Mostrando resultados para:
+          </p>
+          <p *ngIf="userInput" class="mostrando-resultados-para-b">
+            “{{ userInput }}”
+          </p>
+        </div>
+        <div fxLayout>
+          <div ngClass="order-by-container" fxLayout>
+            <p class="mostrando-resultados-para-b">ordenar:</p>
+            <button class="order-by-button" mat-icon-button>
+              <mat-icon (click)="onSortProducts()">{{
+                lowerToHigherPrice ? "arrow_drop_up" : "arrow_drop_down"
+              }}</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="top-add-container" fxLayout fxLayoutAlign="center center">
+      <img
+        src="../../assets/images/top-banner-add-reference.png"
+        style="width: 728px; height: 90px"
+      />
+    </div>
+    <div class="bottom-container" fxLayout="column" fxFlexAlign="center center">
+      <div fxLayout fxLayoutAlign="center">
+        <div class="results-container" fxLayout fxLayoutAlign="center start">
+          <div
+            *ngIf="isLoading"
+            id="spinner-container"
+            fxLayout="column"
+            fxLayoutAlign="center center"
+          >
+            <div id="spinner-wrapper">
+              <span class="loader"><span class="loader-inner"></span></span>
+            </div>
+            <span id="loading-text"
+              >Buscando resultados para: {{ userInput }}</span
+            >
+          </div>
+
+          <div
+            *ngIf="products.length === 0 && !isLoading"
+            class="spinner-wrapper"
+            style="width: 682px; height: 341px"
+          ></div>
+
+          <div *ngIf="!isLoading && products.length > 0">
+            <div id="top-separator"></div>
+
+            <div
+              *ngFor="let product of products"
+              id="card"
+              fxLayoutAlign="start start"
+            >
+              <a
+                href="{{ product.link }}"
+                fxLayoutAlign="start start"
+                style="text-decoration: none"
+                target="_blank"
+              >
+                <div
+                  id="card-image-container"
+                  fxLayout="column"
+                  fxLayoutAlign="start center"
+                >
+                  <img
+                    id="vendor-logo"
+                    src="{{ vendorLogoCheck(product.vendor) }}"
+                  />
+                  <img id="image" src="{{ product.image }}" />
+                </div>
+                <div
+                  fxFlex
+                  fxLayout="column"
+                  fxLayoutAlign="space-between start"
+                  style="height: 100%; width: 100%; height: 119px; width: 530px"
+                >
+                  <span id="product-name">{{ product.name }} </span>
+                  <div
+                    id="discount-price-wrapper"
+                    fxFlex
+                    fxLayoutAlign="space-between end"
+                  >
+                    <span id="discount-text" fxFlex>{{
+                      discountCheck(product.vendor)
+                    }}</span>
+                    <span id="price" fxFlex fxFlexAlign="end end"
+                      >{{ product.price | currency }} MXN</span
+                    >
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div
+              fxLayoutAlign="center"
+              style="margin-top: 127px; margin-bottom: 127px; width: 100%"
+            >
+              <button
+                *ngIf="!noMore"
+                id="mas-resultados-button"
+                mat-button
+                (click)="onPagination()"
+                [disabled]="noMore"
+              >
+                Más resultados
+              </button>
+              <span *ngIf="noMore" id="fin-de-resultados"
+                >Fin de resultados</span
+              >
+            </div>
+          </div>
+
+          <div fxHide.lt-md id="side-adds-container">
+            <img
+              src="../../../assets/images/side-banner-add-reference.jpg"
+              style="height: 250px; width: 300px"
+            />
+            <img
+              src="../../../assets/images/side-banner-add-reference.jpg"
+              style="height: 250px; width: 300px; margin-top: 30px"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

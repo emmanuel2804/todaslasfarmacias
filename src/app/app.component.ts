@@ -1,10 +1,15 @@
 import { Component } from '@angular/core';
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'todas-las-farmacias';
+  constructor(private authService: AuthService) {}
+
+  public ngOnInit(): void {
+    this.authService.autoLogin();
+  }
 }
