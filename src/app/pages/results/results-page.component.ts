@@ -28,7 +28,6 @@ export class ResultsPageComponent implements OnInit {
   ) {}
 
   // TODOS:
-  // Add "odenar por" funcionality
   // Add key to dotenv
 
   public ngOnInit(): void {
@@ -45,8 +44,8 @@ export class ResultsPageComponent implements OnInit {
     this.subsHandler.push(
       this.searchService.getPosts().subscribe((products) => {
         this.isLoading = false;
+        this.sortProducts(products);
         this.products = products;
-        this.onSortProducts();
       })
     );
   }
@@ -59,31 +58,23 @@ export class ResultsPageComponent implements OnInit {
     }
   }
 
-  // public onSortProducts(incomingProducts?: []): void {
-  //   this.lowerToHigherPrice = !this.lowerToHigherPrice;
+  public onSortProducts(incomingProducts?: []): void {
+    this.lowerToHigherPrice = !this.lowerToHigherPrice;
 
-  //   if (incomingProducts) {
-  //     if (this.lowerToHigherPrice) {
-  //       this.products.sort((a, b) => (a.price > b.price ? 1 : -1));
-  //     } else {
-  //       this.products.sort((a, b) => (a.price < b.price ? 1 : -1));
-  //     }
-  //   } else {
-  //     if (this.products.length > 0) {
-  //       if (this.lowerToHigherPrice) {
-  //         this.products.sort((a, b) => (a.price > b.price ? 1 : -1));
-  //       } else {
-  //         this.products.sort((a, b) => (a.price < b.price ? 1 : -1));
-  //       }
-  //     }
-  //   }
-  // }
-
-  private sortProducts(productsArray): [] {
-    if (this.lowerToHigherPrice) {
-      return productsArray.sort((a, b) => (a.price > b.price ? 1 : -1));
+    if (incomingProducts) {
+      this.sortProducts(incomingProducts);
     } else {
-      return productsArray.sort((a, b) => (a.price < b.price ? 1 : -1));
+      if (this.products.length > 0) {
+        this.sortProducts(this.products);
+      }
+    }
+  }
+
+  private sortProducts(productsArray) {
+    if (this.lowerToHigherPrice) {
+      productsArray.sort((a, b) => (a.price > b.price ? 1 : -1));
+    } else {
+      productsArray.sort((a, b) => (a.price < b.price ? 1 : -1));
     }
   }
 
