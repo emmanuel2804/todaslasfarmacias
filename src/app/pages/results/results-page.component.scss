@@ -221,8 +221,15 @@ input:focus {
   background-color: #fdd736 !important;
 }
 
+#mas-resultados-button-container {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  width: 100%;
+  background-color: #333;
+}
+
 #mas-resultados-button-xs {
-  width: 160px;
+  width: 140px;
   height: 38px;
 
   font-family: Raleway;
@@ -237,13 +244,16 @@ input:focus {
 }
 
 #fin-de-resultados-xs {
-  height: 38px;
+  // height: 38px;
 
   font-family: Raleway;
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
   line-height: 24px !important;
+
+  padding-top: 7px;
+  padding-bottom: 7px;
 
   color: #9c9c9c;
 }

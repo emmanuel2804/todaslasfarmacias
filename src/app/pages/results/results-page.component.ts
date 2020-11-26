@@ -27,9 +27,6 @@ export class ResultsPageComponent implements OnInit {
     private scroll: ViewportScroller
   ) {}
 
-  // TODOS:
-  // Add key to dotenv
-
   public ngOnInit(): void {
     this.isLoading = this.searchService.getIsLoading();
     this.userInput = this.searchService.getUserInput();
@@ -46,6 +43,7 @@ export class ResultsPageComponent implements OnInit {
         this.isLoading = false;
         this.sortProducts(products);
         this.products = products;
+        console.log(this.products);
       })
     );
   }
@@ -86,6 +84,12 @@ export class ResultsPageComponent implements OnInit {
       case 'farmaciaschedraui': {
         return '../../../assets/images/logos-farmacias/farmaciaschedraui.png';
       }
+      case 'farmaciasfarmalisto': {
+        return '../../../assets/images/logos-farmacias/farmaciasfarmalisto.png';
+      }
+      case 'farmaciasgi': {
+        return '../../../assets/images/logos-farmacias/farmaciasgi.png';
+      }
       case 'farmaciasguadalajara': {
         return '../../../assets/images/logos-farmacias/farmaciasguadalajara.png';
       }
@@ -112,6 +116,12 @@ export class ResultsPageComponent implements OnInit {
       case 'farmaciaschedraui': {
         return '5% Descuento con inapam';
       }
+      case 'farmaciasfarmalisto': {
+        return; // '0% Descuento con inapam';
+      }
+      case 'farmaciasgi': {
+        return; // '0% Descuento con inapam';
+      }
       case 'farmaciasguadalajara': {
         return '5% Descuento con inapam';
       }
@@ -119,10 +129,10 @@ export class ResultsPageComponent implements OnInit {
         return;
       }
       case 'farmaciasmultifarmacias': {
-        return '0% Descuento con inapam';
+        return; // '0% Descuento con inapam';
       }
       case 'farmaciassanpablo': {
-        return '0% Descuento con inapam';
+        return; // '0% Descuento con inapam';
       }
       case 'farmaciassams': {
         return '7% Descuento con inapam';
@@ -138,6 +148,12 @@ export class ResultsPageComponent implements OnInit {
       case 'farmaciaschedraui': {
         return 'inapam -5%';
       }
+      case 'farmaciasfarmalisto': {
+        return; // 'inapam -0%';
+      }
+      case 'farmaciasgi': {
+        return; // 'inapam -0%';
+      }
       case 'farmaciasguadalajara': {
         return 'inapam -5%';
       }
@@ -145,10 +161,10 @@ export class ResultsPageComponent implements OnInit {
         return;
       }
       case 'farmaciasmultifarmacias': {
-        return 'inapam 0%';
+        return; // 'inapam 0%';
       }
       case 'farmaciassanpablo': {
-        return 'inapam 0%';
+        return; // 'inapam 0%';
       }
       case 'farmaciassams': {
         return 'inapam -7%';
