@@ -31,8 +31,16 @@ export class SearchService {
     return this.isLoadingSuject.asObservable();
   }
 
-  public getPosts(): Observable<[]> {
+  public getProducts(): Observable<[]> {
     return this.products$.asObservable();
+  }
+
+  public getProductsAmount(): number {
+    return this.products.length;
+  }
+
+  public getFilteredProductsAmount(): number {
+    return this.filteredProducts.length;
   }
 
   public getPaginatedProducts(amountToSkip: number, filtered?: boolean): [] {
@@ -50,25 +58,23 @@ export class SearchService {
       paginatedProducts.push(productsToSort[counter]);
       counter++;
     }
-
+    console.log('paginated products: ' + paginatedProducts.length);
     return paginatedProducts;
   }
 
   public filterProducts(vendorNames: any[]) {
+    console.log('filterProducts fired!');
     const tempProducts = [];
 
     if (vendorNames.length === 1) {
+      console.log('vendorNames.length === 1');
+      console.log(this.products.length);
       this.products.forEach((product: any) => {
         if (product.vendor === this.getVendorCode(vendorNames[0])) {
           tempProducts.push(product);
         }
       });
-
-      this.sortProducts(tempProducts);
-      this.filteredProducts = tempProducts as [];
-    }
-
-    if (vendorNames.length > 1) {
+    } else if (vendorNames.length > 1) {
       vendorNames.forEach((vendorNames: string) => {
         this.products.forEach((product: any) => {
           if (product.vendor === this.getVendorCode(vendorNames)) {
@@ -76,20 +82,26 @@ export class SearchService {
           }
         });
       });
-
-      this.sortProducts(tempProducts);
-      this.filteredProducts = tempProducts as [];
     }
+
+    this.filteredProducts = tempProducts as [];
+    console.log(
+      'total amount filtered products: ' + this.filteredProducts.length
+    );
 
     if (this.filteredProducts.length <= 24) {
       this.products$.next([...this.filteredProducts]);
     } else {
       const paginatedFilteredProducts = [];
+
+      let counter = 0;
       this.filteredProducts.forEach((product) => {
-        while (paginatedFilteredProducts.length < 25) {
-          paginatedFilteredProducts.push(product);
-        }
+        console.log(product);
+        paginatedFilteredProducts.push(product);
+        counter++;
       });
+
+      console.log('filtered paginated products: ' + paginatedFilteredProducts);
 
       this.products$.next([...(paginatedFilteredProducts as [])]);
     }
@@ -173,6 +185,8 @@ export class SearchService {
       .subscribe((response) => {
         this.isLoadingSuject.next(false);
         this.products = response.products;
+
+        console.log('total ammount of products: ' + response.products.length);
 
         const paginatedProducts: [] = [];
 

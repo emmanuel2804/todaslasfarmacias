@@ -61,10 +61,11 @@ export class ResultsPageComponent implements OnInit {
     );
 
     this.subsHandler.push(
-      this.searchService.getPosts().subscribe((products) => {
+      this.searchService.getProducts().subscribe((products) => {
         this.isLoading = false;
         this.sortProducts(products);
         this.products = products;
+        console.log(this.products);
       })
     );
   }
@@ -73,7 +74,7 @@ export class ResultsPageComponent implements OnInit {
     if (this.userInputLocal) {
       this.userInput = this.userInputLocal;
       this.searchService.sendToScraper(this.userInputLocal);
-      this.searchService.saveSearchData(this.userInputLocal);
+      // this.searchService.saveSearchData(this.userInputLocal);
     }
   }
 
@@ -98,10 +99,14 @@ export class ResultsPageComponent implements OnInit {
   }
 
   public onFilterProducts(vendorNames): void {
+    console.log('onFilteredProducts fired!');
     if (vendorNames.length === 0) {
       this.isFiltered = false;
+      // console.log('onFilteredProducts :' + this.products.length);
+      this.searchService.getPaginatedProducts(this.products.length); // Get products again after the last filter is removed
     } else {
       this.isFiltered = true;
+      console.log('onFilteredProducts :' + this.products.length);
       this.searchService.filterProducts(vendorNames.value);
     }
   }
@@ -203,16 +208,28 @@ export class ResultsPageComponent implements OnInit {
   }
 
   public async onPagination(): Promise<void> {
-    // let paginatedProducts = [];
+    if (
+      !this.isFiltered &&
+      this.products.length === this.searchService.getProductsAmount()
+    ) {
+      console.log('no more (!isFiltered): ' + this.products.length);
+      this.noMore = true;
+      return;
+    }
+
+    if (
+      this.isFiltered &&
+      this.products.length === this.searchService.getFilteredProductsAmount()
+    ) {
+      console.log('no more (isFiltered): ' + this.products.length);
+      this.noMore = true;
+      return;
+    }
 
     let paginatedProducts = this.searchService.getPaginatedProducts(
       this.products.length,
       this.isFiltered
     );
-
-    // paginatedProducts.forEach((product) => {
-    //   this.products.push(product);
-    // });
 
     if (paginatedProducts.length > 0) {
       if (this.lowerToHigherPrice) {
@@ -223,13 +240,8 @@ export class ResultsPageComponent implements OnInit {
         });
       } else {
         paginatedProducts.forEach((product) => this.products.unshift(product));
+        this.scrollToTop();
       }
-    } else {
-      this.noMore = true;
-    }
-
-    if (!this.lowerToHigherPrice) {
-      this.scrollToTop();
     }
   }
 
