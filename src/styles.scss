@@ -57,3 +57,47 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+// mat-select selected value color
+.mat-select-value {
+  color: #fdd736;
+}
+
+// mat-select removes the scrollbar (shows full size of content)
+.mat-select-panel {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+// mat-select items hover over color
+.mat-select-panel:hover {
+  background-color: #747474 !important;
+}
+
+// mat-select selected title color
+.mat-option.mat-active {
+  color: #fdd736 !important;
+  // background-color: #747474 !important;
+}
+
+// mat-select hover over color of arrow icon
+.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: #fdd736;
+}
+
+// mat-select color of arrow
+.mat-form-field.mat-primary .mat-select-arrow {
+  // color: #747474;
+  color: #fdd736;
+}
+
+// mat-select active checkbox color
+.mat-primary .mat-pseudo-checkbox-checked,
+.mat-primary .mat-pseudo-checkbox-indeterminate {
+  background: #fdd736;
+}
+
+// mat-select color of the selected checkbox text
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: #fdd736;
+}

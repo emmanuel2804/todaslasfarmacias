@@ -1,5 +1,6 @@
 import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SearchService } from 'src/app/shared/search.service';
 
@@ -10,17 +11,38 @@ import { SearchService } from 'src/app/shared/search.service';
 })
 export class ResultsPageComponent implements OnInit {
   public lowerToHigherPrice: boolean = true;
+  public noMore: boolean = false;
   public isLoading: boolean = false;
   public hasInapamDescount: boolean = true;
   public userInput: string = null;
   public userInputLocal: string = null;
   public products: [] = [];
-  public noMore: boolean = false;
+  private isFiltered: boolean = false;
   private subsHandler: Subscription[] = [];
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     // this.pageYoffset = window.pageYOffset;
   }
+
+  pharmacies = new FormControl();
+  pharmaciesList: string[] = [
+    'Ahorro',
+    'Chedraui',
+    'Farmalisto',
+    'Farmacias Gi',
+    'Guadalajara',
+    'Matter',
+    'Multifarmacias',
+    'San Pablo',
+    'Sams',
+  ];
+
+  // TODOS
+
+  // Let the user select the farmacy of his choise and filter acordingly
+  // Check if filter pharmacy is selected on initial serach(before the first results) and adjust
+  // Cart like functionality to let user keep track of products he has chosen (design before implementing!!!)
+  // Resultados ceraca de ti al pedir locacion para coger la locacion del usuario y el ip
 
   constructor(
     private searchService: SearchService,
@@ -43,7 +65,6 @@ export class ResultsPageComponent implements OnInit {
         this.isLoading = false;
         this.sortProducts(products);
         this.products = products;
-        console.log(this.products);
       })
     );
   }
@@ -73,6 +94,15 @@ export class ResultsPageComponent implements OnInit {
       productsArray.sort((a, b) => (a.price > b.price ? 1 : -1));
     } else {
       productsArray.sort((a, b) => (a.price < b.price ? 1 : -1));
+    }
+  }
+
+  public onFilterProducts(vendorNames): void {
+    if (vendorNames.length === 0) {
+      this.isFiltered = false;
+    } else {
+      this.isFiltered = true;
+      this.searchService.filterProducts(vendorNames.value);
     }
   }
 
@@ -172,19 +202,34 @@ export class ResultsPageComponent implements OnInit {
     }
   }
 
-  public onPagination(): void {
-    const paginatedProducts: [] = this.searchService.getPaginatedProducts(
-      this.products.length
+  public async onPagination(): Promise<void> {
+    // let paginatedProducts = [];
+
+    let paginatedProducts = this.searchService.getPaginatedProducts(
+      this.products.length,
+      this.isFiltered
     );
+
+    // paginatedProducts.forEach((product) => {
+    //   this.products.push(product);
+    // });
 
     if (paginatedProducts.length > 0) {
       if (this.lowerToHigherPrice) {
-        paginatedProducts.forEach((product) => this.products.push(product));
+        await paginatedProducts.forEach((product) => {
+          setTimeout(() => {
+            this.products.push(product);
+          }, 500);
+        });
       } else {
         paginatedProducts.forEach((product) => this.products.unshift(product));
       }
     } else {
       this.noMore = true;
+    }
+
+    if (!this.lowerToHigherPrice) {
+      this.scrollToTop();
     }
   }
 

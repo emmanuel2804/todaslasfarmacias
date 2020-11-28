@@ -11,6 +11,7 @@ export class SearchService {
   private searchData: Data;
   private products: [] = [];
   private products$ = new Subject<[]>();
+  private filteredProducts: [] = [];
   private isLoading: boolean = false;
   private isLoadingSuject = new Subject<boolean>();
   private userInput: string = null;
@@ -34,15 +35,104 @@ export class SearchService {
     return this.products$.asObservable();
   }
 
-  public getPaginatedProducts(amountToSkip: number): [] {
+  public getPaginatedProducts(amountToSkip: number, filtered?: boolean): [] {
     const paginatedProducts: [] = [];
+    let productsToSort: [] = [];
+
+    if (filtered) {
+      productsToSort = this.filteredProducts;
+    } else {
+      productsToSort = this.products;
+    }
 
     let counter = amountToSkip;
-    while (counter < amountToSkip + 24 && counter < this.products.length) {
-      paginatedProducts.push(this.products[counter]);
+    while (counter < amountToSkip + 24 && counter < productsToSort.length) {
+      paginatedProducts.push(productsToSort[counter]);
       counter++;
     }
+
     return paginatedProducts;
+  }
+
+  public filterProducts(vendorNames: any[]) {
+    const tempProducts = [];
+
+    if (vendorNames.length === 1) {
+      this.products.forEach((product: any) => {
+        if (product.vendor === this.getVendorCode(vendorNames[0])) {
+          tempProducts.push(product);
+        }
+      });
+
+      this.sortProducts(tempProducts);
+      this.filteredProducts = tempProducts as [];
+    }
+
+    if (vendorNames.length > 1) {
+      vendorNames.forEach((vendorNames: string) => {
+        this.products.forEach((product: any) => {
+          if (product.vendor === this.getVendorCode(vendorNames)) {
+            tempProducts.push(product);
+          }
+        });
+      });
+
+      this.sortProducts(tempProducts);
+      this.filteredProducts = tempProducts as [];
+    }
+
+    if (this.filteredProducts.length <= 24) {
+      this.products$.next([...this.filteredProducts]);
+    } else {
+      const paginatedFilteredProducts = [];
+      this.filteredProducts.forEach((product) => {
+        while (paginatedFilteredProducts.length < 25) {
+          paginatedFilteredProducts.push(product);
+        }
+      });
+
+      this.products$.next([...(paginatedFilteredProducts as [])]);
+    }
+  }
+
+  private sortProducts(productsArray, sortLowToHigh?: boolean) {
+    if (sortLowToHigh) {
+      productsArray.sort((a, b) => (a.price > b.price ? 1 : -1));
+    } else {
+      productsArray.sort((a, b) => (a.price < b.price ? 1 : -1));
+    }
+  }
+
+  private getVendorCode(pharmacyName: string): string {
+    switch (pharmacyName) {
+      case 'Ahorro': {
+        return 'farmaciasahorro';
+      }
+      case 'Chedraui': {
+        return 'farmaciaschedraui';
+      }
+      case 'Farmalisto': {
+        return 'farmaciasfarmalisto';
+      }
+      case 'Farmacias Gi': {
+        return 'farmaciasgi';
+      }
+      case 'Guadalajara': {
+        return 'farmaciasguadalajara';
+      }
+      case 'Matter': {
+        return 'farmaciasmatter';
+      }
+      case 'Multifarmacias': {
+        return 'farmaciasmultifarmacias';
+      }
+      case 'San Pablo': {
+        return 'farmaciassanpablo';
+      }
+      case 'Sams': {
+        return 'farmaciassams';
+      }
+    }
   }
 
   public saveSearchData(userInput: string): void {
