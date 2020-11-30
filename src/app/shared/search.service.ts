@@ -75,7 +75,7 @@ export class SearchService {
     return paginatedProducts;
   }
 
-  public filterProducts(vendorNames: any[]) {
+  public filterProducts(vendorNames: any[], more: boolean = false): void {
     const tempProducts = [];
 
     if (vendorNames.length === 1) {
@@ -99,9 +99,12 @@ export class SearchService {
       this.products$.next([...this.filteredProducts]);
     } else {
       const paginatedFilteredProducts = [];
+      let amountToReturn = 24;
+
+      if (more) amountToReturn = 50;
 
       let counter = 0;
-      while (counter < 24) {
+      while (counter < amountToReturn) {
         paginatedFilteredProducts.push(this.filteredProducts[counter]);
         counter++;
       }
@@ -109,7 +112,7 @@ export class SearchService {
     }
   }
 
-  private sortProducts(productsArray, sortLowToHigh: boolean) {
+  private sortProducts(productsArray, sortLowToHigh: boolean): [] {
     if (sortLowToHigh) {
       productsArray.sort((a, b) => (a.price > b.price ? 1 : -1));
     } else {

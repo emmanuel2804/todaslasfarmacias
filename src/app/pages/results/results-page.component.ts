@@ -40,8 +40,6 @@ export class ResultsPageComponent implements OnInit {
 
   // TODOS
 
-  // Let the user select the farmacy of his choise and filter acordingly
-  // Check if filter pharmacy is selected on initial serach(before the first results) and adjust
   // Cart like functionality to let user keep track of products he has chosen (design before implementing!!!)
   // Resultados ceraca de ti al pedir locacion para coger la locacion del usuario y el ip
 
@@ -119,9 +117,8 @@ export class ResultsPageComponent implements OnInit {
       this.searchService.filterProducts(vendorNames.value);
     }
 
-    // Change the amount of returned products to 50?
     if (this.isFiltered && vendorNames.value.length > 1) {
-      this.searchService.filterProducts(vendorNames.value);
+      this.searchService.filterProducts(vendorNames.value, true);
     }
     if (this.searchService.getFilteredProductsAmount() > this.products.length) {
       this.noMore = false;
