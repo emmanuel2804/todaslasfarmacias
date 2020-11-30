@@ -171,7 +171,7 @@
   </div>
 
   <button
-    id="scroll-top-fab"
+    id="scroll-top-fab-xs"
     mat-fab
     aria-label="Arriba"
     (click)="scrollToTop()"
@@ -191,34 +191,64 @@
 >
   <div ngClass="top-bar" fxLayoutAlign="space-between center">
     <img
+      fxShow.md
+      fxShow.lt-md
+      fxShow.lg
+      fxHide.xs
+      fxHide.gt-md
       ngClass="logo"
       src="../../assets/images/logo/logo-gray.png"
       alt="todaslasfarmacias.com"
       routerLink="/home-page"
     />
-    <div ngClass="searchbar-container" fxLayout fxLayoutAlign="start center">
+    <span
+      fxHide.md
+      fxHide.lt-md
+      fxHide.lg
+      ngClass="logo-text"
+      ngClass.lt-md="logo-text-md"
+      ngClass.lg="logo-text-lg"
+      fxFlexAlign="start center"
+      routerLink="/home-page"
+      >todaslasfarmacias.com</span
+    >
+    <div ngClass="searchbar-container" fxLayout fxLayoutAlign="center">
       <img
         ngClass="search-icon"
+        ngClass.sm="search-icon-sm"
+        ngClass.md="search-icon-md"
+        ngClass.lt-md="search-icon-md"
         src="../../assets/images/search-outline-gray.svg"
       />
       <input
         ngClass="search-input"
         ngClass.lt-md="search-input-md"
+        ngClass.lt-lg="search-input-lg"
         matInput
         type="text"
         [(ngModel)]="userInputLocal"
         placeholder="ejemplo: Ibuprofeno"
         (keyup.enter)="onSearch()"
       />
-      <!-- <button *ngIf="userInput.length > 0" id="close-icon" mat-icon-button>
-        <mat-icon>close</mat-icon>
-      </button> -->
       <button id="search-button" mat-raised-button (click)="onSearch()">
         Buscar
       </button>
     </div>
-    <div style="width: 86px; height: 86px; margin-left: 32px"></div>
+    <div
+      fxHide.md
+      fxHide.lt-md
+      fxHide.lg
+      style="width: 292px; height: 86px"
+    ></div>
+    <div
+      fxShow.md
+      fxShow.lt-md
+      fxHide.gt-md
+      style="width: 28px; height: 86px"
+    ></div>
   </div>
+
+  <div style="height: 90px; width: auto"></div>
 
   <div>
     <div fxLayout fxLayoutAlign="center center">
@@ -375,4 +405,12 @@
       </div>
     </div>
   </div>
+  <button
+    id="scroll-top-fab"
+    mat-fab
+    aria-label="Arriba"
+    (click)="scrollToTop()"
+  >
+    <mat-icon>arrow_upward</mat-icon>
+  </button>
 </div>

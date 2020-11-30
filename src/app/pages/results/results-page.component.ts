@@ -120,6 +120,7 @@ export class ResultsPageComponent implements OnInit {
     if (this.isFiltered && vendorNames.value.length > 1) {
       this.searchService.filterProducts(vendorNames.value, true);
     }
+
     if (this.searchService.getFilteredProductsAmount() > this.products.length) {
       this.noMore = false;
     }

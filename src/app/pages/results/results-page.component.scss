@@ -210,7 +210,7 @@ input:focus {
   color: #fff;
 }
 
-#scroll-top-fab {
+#scroll-top-fab-xs {
   position: fixed !important;
   z-index: 1000;
 
@@ -269,9 +269,13 @@ input:focus {
 
 .top-bar {
   width: 100%;
-  height: 100px;
+  height: 90px;
 
   background-color: #fdd736 !important;
+
+  position: fixed;
+  top: 0px;
+  z-index: 1000;
 
   -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.72);
   -moz-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.72);
@@ -279,16 +283,74 @@ input:focus {
 }
 
 .logo {
-  width: 82px;
-  height: 82px;
-
-  margin-left: 32px;
-
+  height: 62px;
+  width: auto;
+  padding-left: 28px;
   cursor: pointer;
+}
+
+.logo-text {
+  font-family: Lobster;
+  font-style: normal;
+  font-weight: lighter;
+  font-size: 30px;
+  line-height: 30px;
+  // font-size: 36px;
+  // line-height: 36px;
+  text-align: start;
+
+  color: #424242;
+  cursor: pointer;
+
+  // margin-left: 40px;
+  margin-left: 28px;
+}
+
+.logo-text-sm {
+  font-family: Lobster;
+  font-style: normal;
+  font-weight: lighter;
+  font-size: 18px;
+  line-height: 18px;
+  text-align: start;
+
+  color: #424242;
+  cursor: pointer;
+
+  margin-left: 28px;
+}
+
+.logo-text-md {
+  font-family: Lobster;
+  font-style: normal;
+  font-weight: lighter;
+  font-size: 28px;
+  line-height: 28px;
+  text-align: start;
+
+  color: #424242;
+  cursor: pointer;
+
+  margin-left: 28px;
+}
+
+.logo-text-lg {
+  font-family: Lobster;
+  font-style: normal;
+  font-weight: lighter;
+  font-size: 28px;
+  line-height: 28px;
+  text-align: start;
+
+  color: #424242;
+  cursor: pointer;
+
+  margin-left: 28px;
 }
 
 .searchbar-container {
   height: 44px;
+  width: 100%;
 }
 
 #searchbar-wrapper {
@@ -303,21 +365,29 @@ input:focus {
   width: 26px;
 
   position: absolute;
-  margin-left: 8px;
+  // margin-left: 8px;
+  margin-top: 6px;
+  margin-right: 758px;
 }
 
-#close-icon {
+.search-icon-sm {
   height: 26px;
   width: 26px;
-
   position: absolute;
-  margin-left: -26px;
+  margin-top: 6px;
+  margin-right: 438px;
+}
 
-  color: #424242;
+.search-icon-md {
+  height: 26px;
+  width: 26px;
+  position: absolute;
+  margin-top: 6px;
+  margin-right: 566px;
 }
 
 .search-input {
-  width: 556px;
+  width: 656px;
   height: 38px;
 
   border: 0px solid;
@@ -333,13 +403,14 @@ input:focus {
   border-bottom-left-radius: 2px;
 
   text-indent: 48px;
+  padding-top: 2px;
 
   color: #747474;
   background-color: #fffffff2;
 }
 
 .search-input-md {
-  width: 356px;
+  width: 340px;
   height: 38px;
 
   border: 0px solid;
@@ -355,6 +426,30 @@ input:focus {
   border-bottom-left-radius: 2px;
 
   text-indent: 48px;
+  padding-top: 2px;
+
+  color: #747474;
+  background-color: #fffffff2;
+}
+
+.search-input-lg {
+  width: 468px;
+  height: 38px;
+
+  border: 0px solid;
+  background-color: transparent;
+
+  font-family: Raleway;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+
+  text-indent: 48px;
+  padding-top: 2px;
 
   color: #747474;
   background-color: #fffffff2;
@@ -381,7 +476,7 @@ input:focus {
 
 #search-button {
   width: 143px;
-  height: 40px;
+  height: 38px;
   border-radius: 0px !important;
 
   font-family: Raleway;
@@ -589,6 +684,17 @@ mat-label {
   line-height: 24px !important;
 
   color: #9c9c9c;
+}
+
+#scroll-top-fab {
+  position: fixed !important;
+  z-index: 1000;
+
+  right: 25px;
+  bottom: 25px;
+
+  color: #424242;
+  background-color: #fdd736 !important;
 }
 
 // Spinner Animation CSS
