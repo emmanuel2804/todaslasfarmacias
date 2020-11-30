@@ -43,6 +43,21 @@ export class SearchService {
     return this.filteredProducts.length;
   }
 
+  public getProductsAfterFilering(): void {
+    const tempProducts: [] = [];
+
+    if (this.products.length <= 24) {
+      this.products$.next([...this.products]);
+      return;
+    }
+    let counter = 0;
+    while (tempProducts.length <= 24) {
+      tempProducts.push(this.products[counter]);
+      counter++;
+    }
+    this.products$.next([...tempProducts]);
+  }
+
   public getPaginatedProducts(amountToSkip: number, filtered?: boolean): [] {
     const paginatedProducts: [] = [];
     let productsToSort: [] = [];
@@ -52,23 +67,18 @@ export class SearchService {
     } else {
       productsToSort = this.products;
     }
-
     let counter = amountToSkip;
     while (counter < amountToSkip + 24 && counter < productsToSort.length) {
       paginatedProducts.push(productsToSort[counter]);
       counter++;
     }
-    console.log('paginated products: ' + paginatedProducts.length);
     return paginatedProducts;
   }
 
   public filterProducts(vendorNames: any[]) {
-    console.log('filterProducts fired!');
     const tempProducts = [];
 
     if (vendorNames.length === 1) {
-      console.log('vendorNames.length === 1');
-      console.log(this.products.length);
       this.products.forEach((product: any) => {
         if (product.vendor === this.getVendorCode(vendorNames[0])) {
           tempProducts.push(product);
@@ -83,11 +93,7 @@ export class SearchService {
         });
       });
     }
-
-    this.filteredProducts = tempProducts as [];
-    console.log(
-      'total amount filtered products: ' + this.filteredProducts.length
-    );
+    this.filteredProducts = this.sortProducts(tempProducts, true);
 
     if (this.filteredProducts.length <= 24) {
       this.products$.next([...this.filteredProducts]);
@@ -95,24 +101,22 @@ export class SearchService {
       const paginatedFilteredProducts = [];
 
       let counter = 0;
-      this.filteredProducts.forEach((product) => {
-        console.log(product);
-        paginatedFilteredProducts.push(product);
+      while (counter < 24) {
+        paginatedFilteredProducts.push(this.filteredProducts[counter]);
         counter++;
-      });
-
-      console.log('filtered paginated products: ' + paginatedFilteredProducts);
-
+      }
       this.products$.next([...(paginatedFilteredProducts as [])]);
     }
   }
 
-  private sortProducts(productsArray, sortLowToHigh?: boolean) {
+  private sortProducts(productsArray, sortLowToHigh: boolean) {
     if (sortLowToHigh) {
       productsArray.sort((a, b) => (a.price > b.price ? 1 : -1));
     } else {
       productsArray.sort((a, b) => (a.price < b.price ? 1 : -1));
     }
+
+    return productsArray;
   }
 
   private getVendorCode(pharmacyName: string): string {
@@ -167,10 +171,9 @@ export class SearchService {
       });
   }
 
-  public sendToScraper(userInput: string): void {
+  public sendToScraper(userInput: string, vendorNames?: []): void {
     this.isLoading = true;
     this.isLoadingSuject.next(true);
-
     this.userInput = userInput;
     this.token = this.authServise.getToken();
 
@@ -186,17 +189,18 @@ export class SearchService {
         this.isLoadingSuject.next(false);
         this.products = response.products;
 
-        console.log('total ammount of products: ' + response.products.length);
+        if (vendorNames && vendorNames.length > 0) {
+          this.filterProducts(vendorNames);
+          return;
+        }
 
         const paginatedProducts: [] = [];
-
         if (this.products.length > 24) {
           let counter = 0;
           while (counter < 24) {
             paginatedProducts.push(this.products[counter]);
             counter++;
           }
-
           this.products$.next(paginatedProducts);
         } else {
           this.products$.next(this.products);

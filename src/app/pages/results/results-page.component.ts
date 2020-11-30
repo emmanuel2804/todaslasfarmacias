@@ -18,6 +18,7 @@ export class ResultsPageComponent implements OnInit {
   public userInputLocal: string = null;
   public products: [] = [];
   private isFiltered: boolean = false;
+  private selectedVendors: [] = [];
   private subsHandler: Subscription[] = [];
 
   @HostListener('window:scroll', ['$event']) onScroll(event) {
@@ -65,7 +66,6 @@ export class ResultsPageComponent implements OnInit {
         this.isLoading = false;
         this.sortProducts(products);
         this.products = products;
-        console.log(this.products);
       })
     );
   }
@@ -73,8 +73,13 @@ export class ResultsPageComponent implements OnInit {
   public onSearch(): void {
     if (this.userInputLocal) {
       this.userInput = this.userInputLocal;
+
+      if (this.isFiltered) {
+        this.searchService.sendToScraper(this.userInput, this.selectedVendors);
+        return;
+      }
+
       this.searchService.sendToScraper(this.userInputLocal);
-      // this.searchService.saveSearchData(this.userInputLocal);
     }
   }
 
@@ -99,15 +104,27 @@ export class ResultsPageComponent implements OnInit {
   }
 
   public onFilterProducts(vendorNames): void {
-    console.log('onFilteredProducts fired!');
-    if (vendorNames.length === 0) {
+    this.isFiltered = true;
+    this.selectedVendors = vendorNames.value;
+
+    if (!this.userInput) return;
+
+    if (vendorNames.value.length === 0) {
       this.isFiltered = false;
-      // console.log('onFilteredProducts :' + this.products.length);
-      this.searchService.getPaginatedProducts(this.products.length); // Get products again after the last filter is removed
-    } else {
-      this.isFiltered = true;
-      console.log('onFilteredProducts :' + this.products.length);
+      this.selectedVendors = [];
+      this.searchService.getProductsAfterFilering();
+    }
+
+    if (vendorNames.value.length === 1) {
       this.searchService.filterProducts(vendorNames.value);
+    }
+
+    // Change the amount of returned products to 50?
+    if (this.isFiltered && vendorNames.value.length > 1) {
+      this.searchService.filterProducts(vendorNames.value);
+    }
+    if (this.searchService.getFilteredProductsAmount() > this.products.length) {
+      this.noMore = false;
     }
   }
 
@@ -212,16 +229,13 @@ export class ResultsPageComponent implements OnInit {
       !this.isFiltered &&
       this.products.length === this.searchService.getProductsAmount()
     ) {
-      console.log('no more (!isFiltered): ' + this.products.length);
       this.noMore = true;
       return;
     }
-
     if (
       this.isFiltered &&
       this.products.length === this.searchService.getFilteredProductsAmount()
     ) {
-      console.log('no more (isFiltered): ' + this.products.length);
       this.noMore = true;
       return;
     }
