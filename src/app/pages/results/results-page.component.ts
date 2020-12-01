@@ -39,8 +39,6 @@ export class ResultsPageComponent implements OnInit {
   ];
 
   // TODOS
-
-  // Cart like functionality to let user keep track of products he has chosen (design before implementing!!!)
   // Resultados ceraca de ti al pedir locacion para coger la locacion del usuario y el ip
 
   constructor(

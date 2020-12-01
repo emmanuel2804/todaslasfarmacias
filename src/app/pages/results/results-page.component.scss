@@ -46,7 +46,6 @@
   position: relative;
 
   background-color: #fdd736;
-  // border-bottom: 1px solid #424242;
 
   -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.72);
   -moz-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.72);
@@ -89,7 +88,7 @@ input:focus {
 
 .search-button-xs {
   width: 92px;
-  height: 30px;
+  height: 28px;
   border-radius: 0px !important;
 
   font-family: Raleway;
@@ -148,13 +147,13 @@ input:focus {
   border-bottom: 1.2px solid rgb(39, 39, 39);
 }
 
-#card-xs {
+.card-xs {
   height: 98px;
   width: 100%;
 
   background-color: #424242;
 
-  border-bottom: 1.2px solid rgb(39, 39, 39);
+  border-bottom: 1.2px solid rgb(39, 39, 39) !important;
 }
 
 #product-image-wrapper-xs {
@@ -197,16 +196,19 @@ input:focus {
   color: #ffffffd6;
 }
 
+#cart-icon-xs {
+  font-size: 19px !important;
+  padding-top: 2px;
+}
+
 #product-price-xs {
   font-family: Raleway;
   font-size: 16px;
   font-weight: bold;
 
-  margin-right: 14px;
-  margin-bottom: 10px;
+  padding-top: 2px;
+  padding-left: 4px;
 
-  // color: #fdd736;
-  // color: #fb6227;
   color: #fff;
 }
 
@@ -244,8 +246,6 @@ input:focus {
 }
 
 #fin-de-resultados-xs {
-  // height: 38px;
-
   font-family: Raleway;
   font-style: normal;
   font-weight: 500;
@@ -263,8 +263,6 @@ input:focus {
 #body-container {
   height: 100%;
   width: 100%;
-
-  // background-color: #424242;
 }
 
 .top-bar {
@@ -295,14 +293,11 @@ input:focus {
   font-weight: lighter;
   font-size: 30px;
   line-height: 30px;
-  // font-size: 36px;
-  // line-height: 36px;
   text-align: start;
 
   color: #424242;
   cursor: pointer;
 
-  // margin-left: 40px;
   margin-left: 28px;
 }
 
@@ -349,7 +344,7 @@ input:focus {
 }
 
 .searchbar-container {
-  height: 44px;
+  height: 40px;
   width: 100%;
 }
 
@@ -365,7 +360,6 @@ input:focus {
   width: 26px;
 
   position: absolute;
-  // margin-left: 8px;
   margin-top: 6px;
   margin-right: 758px;
 }
@@ -403,7 +397,7 @@ input:focus {
   border-bottom-left-radius: 2px;
 
   text-indent: 48px;
-  padding-top: 2px;
+  margin-top: 0.2px;
 
   color: #747474;
   background-color: #fffffff2;
@@ -426,7 +420,7 @@ input:focus {
   border-bottom-left-radius: 2px;
 
   text-indent: 48px;
-  padding-top: 2px;
+  margin-top: 0.2px;
 
   color: #747474;
   background-color: #fffffff2;
@@ -449,7 +443,7 @@ input:focus {
   border-bottom-left-radius: 2px;
 
   text-indent: 48px;
-  padding-top: 2px;
+  margin-top: 0.2px;
 
   color: #747474;
   background-color: #fffffff2;
@@ -570,8 +564,7 @@ mat-label {
   height: 119px;
 
   background-color: #333333a6;
-
-  border-bottom: 1.2px solid rgb(39, 39, 39);
+  border-bottom: 1.2px solid #272727;
 }
 
 #card-image-container {
@@ -703,9 +696,7 @@ mat-label {
   display: inline-block;
   width: 45px;
   height: 45px;
-  // position: relative;
   border: 6px solid #fdd736;
-  // top: 50%;
 
   margin-bottom: 12px;
   animation: loader 2s infinite ease;
