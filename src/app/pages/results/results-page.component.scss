@@ -57,12 +57,12 @@
   width: 18px;
 
   position: absolute;
-  margin-top: 6px;
+  margin-top: 5px;
   margin-left: 6px;
 }
 
 .search-input-xs {
-  width: 180px;
+  width: 190px;
   height: 28px;
   border: 0px solid;
   background-color: transparent;
@@ -73,6 +73,7 @@
   font-size: 12px;
   line-height: 14px;
 
+  border-radius: 0px;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
 
@@ -113,8 +114,8 @@ input:focus {
 
 .buscando-text-xs {
   font-family: Raleway;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: bold;
 
   margin-left: 12px;
   margin-bottom: 9px;
@@ -124,7 +125,7 @@ input:focus {
 
 .ordenar-text-xs {
   font-family: Raleway;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
 
   padding-top: 19px;
@@ -136,6 +137,7 @@ input:focus {
   margin-top: 8px;
 
   color: #424242;
+  background-color: #fdd736;
 }
 
 #add-container-xs {
@@ -207,7 +209,7 @@ input:focus {
   font-weight: bold;
 
   padding-top: 2px;
-  padding-left: 4px;
+  padding-left: 2px;
 
   color: #fff;
 }
@@ -215,12 +217,20 @@ input:focus {
 #scroll-top-fab-xs {
   position: fixed !important;
   z-index: 1000;
-
-  right: 15px;
-  bottom: 15px;
+  // right: 15px;
+  // bottom: 15px;
+  right: 24px;
+  bottom: 34px;
 
   color: #424242;
   background-color: #fdd736 !important;
+
+  mat-icon {
+    font-size: 38px !important;
+    height: 44px;
+    width: 44px;
+    padding-top: 6px;
+  }
 }
 
 #mas-resultados-button-container {
@@ -236,7 +246,7 @@ input:focus {
 
   font-family: Raleway;
   font-style: normal;
-  font-weight: 500;
+  font-weight: bold;
   font-size: 15px;
   line-height: 24px !important;
 
@@ -688,6 +698,14 @@ mat-label {
 
   color: #424242;
   background-color: #fdd736 !important;
+
+  mat-icon {
+    font-size: 38px !important;
+    font-weight: 300 !important;
+    height: 44px;
+    width: 44px;
+    padding-top: 6px;
+  }
 }
 
 // Spinner Animation CSS

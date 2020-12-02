@@ -1,6 +1,7 @@
 import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { SearchService } from 'src/app/shared/search.service';
 
@@ -43,7 +44,8 @@ export class ResultsPageComponent implements OnInit {
 
   constructor(
     private searchService: SearchService,
-    private scroll: ViewportScroller
+    private scroll: ViewportScroller,
+    private dialog: MatDialog
   ) {}
 
   public ngOnInit(): void {

@@ -1,9 +1,5 @@
 <div fxHide.gt-xs id="main-container-xs" fxFlex fxLayout="column">
-  <div
-    ngClass="top-bar"
-    ngClass.xs="top-bar-xs"
-    fxLayoutAlign="space-between center"
-  >
+  <div class="top-bar-xs" fxLayoutAlign="space-between center">
     <span
       fxShow.xs
       id="logo-text-xs"
@@ -14,38 +10,30 @@
     >
     <img
       fxHide.xs
-      ngClass="logo"
+      class="logo"
       src="../../assets/images/logo/logo-yellow.png"
       alt="todaslasfarmacias.com"
       routerLink="/home-page"
     />
     <div
       fxHide.xs
-      ngClass="searchbar-container"
-      ngClass.xs="searchbar-container-xs"
+      class="searchbar-container-xs"
       fxLayout
       fxLayoutAlign="center center"
     >
       <img
-        ngClass="search-icon"
-        ngClass.xs="search-icon-xs"
+        class="search-icon-xs"
         src="../../assets/images/search-outline-gray.svg"
       />
       <input
-        ngClass="search-input"
-        ngClass.xs="search-input-xs"
+        class="search-input-xs"
         matInput
         type="text"
         [(ngModel)]="userInputLocal"
         placeholder="ejemplo: Ibuprofeno"
         (keyup.enter)="onSearch()"
       />
-      <button
-        ngClass="search-button"
-        ngClass.xs="search-button-xs"
-        mat-raised-button
-        (click)="onSearch()"
-      >
+      <button class="search-button-xs" mat-raised-button (click)="onSearch()">
         Buscar
       </button>
     </div>
@@ -57,33 +45,25 @@
   <div
     fxShow.xs
     fxHide.gt-xs
-    ngClass="searchbar-container"
-    ngClass.xs="searchbar-container-xs"
+    class="searchbar-container-xs"
     fxLayout
     fxLayoutAlign="center start"
   >
     <div id="searchbar-wrapper" fxLayout="column" fxLayoutAlign="start center">
       <div>
         <img
-          ngClass="search-icon"
-          ngClass.xs="search-icon-xs"
+          class="search-icon-xs"
           src="../../assets/images/search-outline-gray.svg"
         />
         <input
-          ngClass="search-input"
-          ngClass.xs="search-input-xs"
+          class="search-input-xs"
           matInput
           type="text"
           [(ngModel)]="userInputLocal"
           placeholder="ejemplo: Ibuprofeno"
           (keyup.enter)="onSearch()"
         />
-        <button
-          ngClass="search-button"
-          ngClass.xs="search-button-xs"
-          mat-raised-button
-          (click)="onSearch()"
-        >
+        <button class="search-button-xs" mat-raised-button (click)="onSearch()">
           Buscar
         </button>
       </div>
@@ -93,13 +73,46 @@
           >Buscando:
           <span style="font-weight: 800">"{{ userInput }}"</span></span
         >
+
         <div fxLayout>
-          <span class="ordenar-text-xs">Ordenar:</span>
-          <button id="caret-button" mat-icon-button>
-            <mat-icon (click)="onSortProducts()">{{
+          <button id="caret-button" mat-flat-button (click)="onSortProducts()">
+            <span class="ordenar-text-xs">Ordenar:</span>
+            <mat-icon>{{
               lowerToHigherPrice ? "arrow_drop_up" : "arrow_drop_down"
             }}</mat-icon>
           </button>
+          <button
+            mat-icon-button
+            style="color: #424242; margin-top: 7px; margin-left: 8px"
+            (click)="vendorSelector.onContainerClick()"
+          >
+            <mat-icon>filter_alt</mat-icon>
+          </button>
+
+          <mat-form-field
+            appearance="none"
+            style="
+              visibility: hidden;
+              width: 8px;
+              height: 8px;
+              margin: 0px;
+              padding: 0px;
+            "
+          >
+            <mat-label>Selecionar farmacia</mat-label>
+            <mat-select
+              [formControl]="pharmacies"
+              multiple
+              #vendorSelector
+              (selectionChange)="onFilterProducts($event)"
+            >
+              <mat-option
+                *ngFor="let pharmacy of pharmaciesList"
+                [value]="pharmacy"
+                >{{ pharmacy }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
     </div>
@@ -405,7 +418,9 @@
                         /* background-color: #fdd736; */
                       "
                     >
-                      <mat-icon>add_shopping_cart</mat-icon>
+                      <mat-icon fontSet="material-icons-outlined"
+                        >shopping_cart</mat-icon
+                      >
                       <span style="margin-left: 8px">Comprar</span>
                     </button></a
                   >

@@ -101,3 +101,16 @@ body {
 .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
   color: #fdd736;
 }
+
+.mat-option.mat-active {
+  background: #747474 !important;
+  // color: rgba(0, 0, 0, 0.87);
+}
+
+.mat-fab .mat-button-wrapper {
+  padding: 0px !important;
+}
+
+.mat-dialog-container {
+  background: #424242 !important;
+}
