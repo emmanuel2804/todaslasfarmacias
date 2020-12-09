@@ -12,7 +12,7 @@ import { AuthService } from './auth/auth.service';
 import { SearchService } from './shared/search.service';
 
 import { AppComponent } from './app.component';
-import { HomePageComponent } from './pages/home-page/home-page.component';
+import { HomePageComponent } from './pages/home/home-page.component';
 import { ResultsPageComponent } from './pages/results/results-page.component';
 
 @NgModule({

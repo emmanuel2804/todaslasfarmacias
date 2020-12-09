@@ -1,25 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import { Observable, Subject, EMPTY } from 'rxjs';
 import { Data } from './data.model';
 import { AuthService } from '../auth/auth.service';
-import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class SearchService {
-  private token: string;
-  private searchData: Data;
+  private token: string = null;
+  private searchData: Data = null;
   private products: [] = [];
   private products$ = new Subject<[]>();
   private filteredProducts: [] = [];
-  private isLoading: boolean = false;
+  private isLoading = false;
   private isLoadingSuject = new Subject<boolean>();
   private userInput: string = null;
+  private userLocation: {} = null;
+  private userIp: {} = null;
 
   constructor(private http: HttpClient, private authServise: AuthService) {}
 
   public getUserInput(): string {
-    if (this.userInput) return this.userInput;
+    if (this.userInput) {
+      return this.userInput;
+    }
     return null;
   }
 
@@ -85,9 +88,9 @@ export class SearchService {
         }
       });
     } else if (vendorNames.length > 1) {
-      vendorNames.forEach((vendorNames: string) => {
+      vendorNames.forEach((vendorName: string) => {
         this.products.forEach((product: any) => {
-          if (product.vendor === this.getVendorCode(vendorNames)) {
+          if (product.vendor === this.getVendorCode(vendorName)) {
             tempProducts.push(product);
           }
         });
@@ -101,7 +104,9 @@ export class SearchService {
       const paginatedFilteredProducts = [];
       let amountToReturn = 24;
 
-      if (more) amountToReturn = 50;
+      if (more) {
+        amountToReturn = 50;
+      }
 
       let counter = 0;
       while (counter < amountToReturn) {
@@ -154,36 +159,66 @@ export class SearchService {
     }
   }
 
-  public saveSearchData(userInput: string): void {
-    this.searchData = {
-      userInput: userInput,
-      date: new Date(),
-    };
-    this.token = this.authServise.getToken();
+  public getUserLocation(): void {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.userLocation = {
+        Cordinates: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        },
+      };
 
-    this.http
-      .post(
-        'http://localhost:3000/api/search',
-        { searchData: this.searchData },
-        {
-          headers: { Authorization: 'Bearer ' + this.token },
-        }
-      )
-      .subscribe((response) => {
-        console.log(response);
-      });
+      this.http
+        .get(
+          'http://api.positionstack.com/v1/reverse?access_key=a312128049ad32653aa031934c59a918&query=' +
+            position.coords.latitude +
+            ',' +
+            position.coords.longitude +
+            '&output=json'
+        )
+        .subscribe((response: any) => {
+          this.userLocation = { Location: response.data[0] };
+
+          this.http.get('https://api.ipify.org/?format=json').subscribe(
+            (ipResponse: { ip: string }) => {
+              this.userLocation = {
+                Location: {
+                  geolocation: response.data[0],
+                  ip: ipResponse.ip,
+                },
+              };
+            },
+            (err) => EMPTY
+          );
+        });
+    });
+
+    this.http.get('https://api.ipify.org/?format=json').subscribe(
+      (response: { ip: string }) => {
+        this.userIp = {
+          ip: response.ip,
+        };
+      },
+      (err) => EMPTY
+    );
   }
 
-  public sendToScraper(userInput: string, vendorNames?: []): void {
+  public search(userInput: string, vendorNames?: []): void {
     this.isLoading = true;
     this.isLoadingSuject.next(true);
     this.userInput = userInput;
     this.token = this.authServise.getToken();
 
+    this.searchData = {
+      userInput,
+      userLocation: this.userLocation != null ? this.userLocation : this.userIp,
+      date: new Date(),
+    };
+
     this.http
       .post<{ products: [] }>(
-        'http://localhost:3000/api/search/scraper',
-        { userInput: userInput },
+        'http://localhost:3000/api/search',
+        { searchData: this.searchData },
         {
           headers: { Authorization: 'Bearer ' + this.token },
         }

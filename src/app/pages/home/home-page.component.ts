@@ -16,8 +16,8 @@ export class HomePageComponent implements OnInit {
 
   public onSearch(): void {
     if (this.userInput) {
-      this.searchService.sendToScraper(this.userInput.toString());
-      this.router.navigate(['results-page']);
+      this.searchService.search(this.userInput.toString());
+      this.router.navigate(['results']);
     }
   }
 }

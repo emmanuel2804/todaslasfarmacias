@@ -5,7 +5,7 @@
       id="logo-text-xs"
       fxFlex
       fxFlexAlign="center"
-      routerLink="/home-page"
+      routerLink="/home"
       >todaslasfarmacias.com</span
     >
     <img
@@ -13,7 +13,7 @@
       class="logo"
       src="../../assets/images/logo/logo-yellow.png"
       alt="todaslasfarmacias.com"
-      routerLink="/home-page"
+      routerLink="/home"
     />
     <div
       fxHide.xs
@@ -24,6 +24,7 @@
       <img
         class="search-icon-xs"
         src="../../assets/images/search-outline-gray.svg"
+        alt="Search Icon"
       />
       <input
         class="search-input-xs"
@@ -54,6 +55,7 @@
         <img
           class="search-icon-xs"
           src="../../assets/images/search-outline-gray.svg"
+          alt="Search Icon"
         />
         <input
           class="search-input-xs"
@@ -122,6 +124,7 @@
     <img
       src="../../../assets/images/top-banner-add-xs.png"
       style="height: 50px; width: 320px; margin: 12px"
+      alt="Top Banner Add"
     />
   </div>
 
@@ -151,8 +154,13 @@
         <img
           src="{{ vendorLogoCheck(product.vendor) }}"
           style="height: 15px; left: 11px; margin-top: 2px"
+          alt="Product Image"
         />
-        <img id="product-image-xs" src="{{ product.image }}" />
+        <img
+          id="product-image-xs"
+          src="{{ product.image }}"
+          alt="Product Image"
+        />
       </div>
       <div fxFlex fxLayout="column">
         <div class="name-comprar-wrapper" fxLayoutAlign="space-between center">
@@ -237,7 +245,7 @@
       ngClass="logo"
       src="../../assets/images/logo/logo-gray.png"
       alt="todaslasfarmacias.com"
-      routerLink="/home-page"
+      routerLink="/home"
     />
     <span
       fxHide.md
@@ -247,7 +255,7 @@
       ngClass.lt-md="logo-text-md"
       ngClass.lg="logo-text-lg"
       fxFlexAlign="start center"
-      routerLink="/home-page"
+      routerLink="/home"
       >todaslasfarmacias.com</span
     >
     <div ngClass="searchbar-container" fxLayout fxLayoutAlign="center">
@@ -257,6 +265,7 @@
         ngClass.md="search-icon-md"
         ngClass.lt-md="search-icon-md"
         src="../../assets/images/search-outline-gray.svg"
+        alt="Search Icon"
       />
       <input
         ngClass="search-input"
@@ -338,6 +347,7 @@
       <img
         src="../../assets/images/top-banner-add-reference.png"
         style="width: 728px; height: 90px"
+        alt="Top Add Banner"
       />
     </div>
     <div class="bottom-container" fxLayout="column" fxFlexAlign="center center">
@@ -380,8 +390,9 @@
                 <img
                   id="vendor-logo"
                   src="{{ vendorLogoCheck(product.vendor) }}"
+                  alt="Logo"
                 />
-                <img id="image" src="{{ product.image }}" />
+                <img id="image" src="{{ product.image }}" alt="Product Image" />
               </div>
               <div
                 fxFlex
@@ -391,10 +402,40 @@
               >
                 <div
                   id="product-name-comprar-wrapper"
-                  fxLayoutAlign="space-between center"
+                  fxLayoutAlign="space-between start"
                   style="height: 56px; width: 100%"
                 >
                   <span id="product-name">{{ product.name }} </span>
+                  <span
+                    fxLayoutAlign="end end"
+                    style="
+                      font-family: Raleway;
+                      font-size: 20px;
+                      font-weight: bold;
+                      text-align: end;
+
+                      margin-top: 22px;
+                      margin-right: 14px;
+
+                      height: 20px;
+                      max-height: 20px;
+                      width: 144px !important;
+                      min-width: 144px;
+
+                      color: #fff !important;
+                    "
+                  >
+                    {{ product.price | currency }} MXN
+                  </span>
+                </div>
+                <div
+                  id="discount-price-wrapper"
+                  fxFlex
+                  fxLayoutAlign="space-between end"
+                >
+                  <span id="discount-text" fxFlex>{{
+                    discountCheck(product.vendor)
+                  }}</span>
                   <a
                     href="{{ product.link }}"
                     fxLayoutAlign="start start"
@@ -408,14 +449,13 @@
                         font-family: Raleway;
                         font-style: normal;
                         font-weight: bold;
-                        border-radius: 3px !important;
+
                         width: 134px;
                         margin-top: 4px;
-                        margin-right: 4px;
+                        margin-bottom: 8px;
+
                         color: #25e67e;
-                        /* color: #fdd736; */
-                        /* color: #747474; */
-                        /* background-color: #fdd736; */
+                        border-radius: 3px !important;
                       "
                     >
                       <mat-icon fontSet="material-icons-outlined"
@@ -423,18 +463,6 @@
                       >
                       <span style="margin-left: 8px">Comprar</span>
                     </button></a
-                  >
-                </div>
-                <div
-                  id="discount-price-wrapper"
-                  fxFlex
-                  fxLayoutAlign="space-between end"
-                >
-                  <span id="discount-text" fxFlex>{{
-                    discountCheck(product.vendor)
-                  }}</span>
-                  <span id="price" fxFlex fxFlexAlign="end end"
-                    >{{ product.price | currency }} MXN</span
                   >
                 </div>
               </div>
@@ -462,10 +490,12 @@
             <img
               src="../../../assets/images/side-banner-add-reference.jpg"
               style="height: 250px; width: 300px"
+              alt="Add"
             />
             <img
               src="../../../assets/images/side-banner-add-reference.jpg"
               style="height: 250px; width: 300px; margin-top: 30px"
+              alt="Add"
             />
           </div>
         </div>

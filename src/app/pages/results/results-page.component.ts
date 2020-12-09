@@ -1,7 +1,6 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { SearchService } from 'src/app/shared/search.service';
 
@@ -10,15 +9,15 @@ import { SearchService } from 'src/app/shared/search.service';
   templateUrl: './results-page.component.html',
   styleUrls: ['./results-page.component.scss'],
 })
-export class ResultsPageComponent implements OnInit {
-  public lowerToHigherPrice: boolean = true;
-  public noMore: boolean = false;
-  public isLoading: boolean = false;
-  public hasInapamDescount: boolean = true;
+export class ResultsPageComponent implements OnInit, OnDestroy {
+  public lowerToHigherPrice = true;
+  public noMore = false;
+  public isLoading = false;
+  public hasInapamDescount = true;
   public userInput: string = null;
   public userInputLocal: string = null;
   public products: [] = [];
-  private isFiltered: boolean = false;
+  private isFiltered = false;
   private selectedVendors: [] = [];
   private subsHandler: Subscription[] = [];
 
@@ -40,12 +39,11 @@ export class ResultsPageComponent implements OnInit {
   ];
 
   // TODOS
-  // Resultados ceraca de ti al pedir locacion para coger la locacion del usuario y el ip
+  // Resultados "cerca de ti" al pedir locacion para coger la locacion del usuario y el ip
 
   constructor(
     private searchService: SearchService,
-    private scroll: ViewportScroller,
-    private dialog: MatDialog
+    private scroll: ViewportScroller
   ) {}
 
   public ngOnInit(): void {
@@ -73,11 +71,14 @@ export class ResultsPageComponent implements OnInit {
       this.userInput = this.userInputLocal;
 
       if (this.isFiltered) {
-        this.searchService.sendToScraper(this.userInput, this.selectedVendors);
+        this.searchService.search(
+          this.userInput.toString(),
+          this.selectedVendors
+        );
         return;
       }
 
-      this.searchService.sendToScraper(this.userInputLocal);
+      this.searchService.search(this.userInput.toString());
     }
   }
 
@@ -93,7 +94,7 @@ export class ResultsPageComponent implements OnInit {
     }
   }
 
-  private sortProducts(productsArray) {
+  private sortProducts(productsArray): void {
     if (this.lowerToHigherPrice) {
       productsArray.sort((a, b) => (a.price > b.price ? 1 : -1));
     } else {
@@ -238,7 +239,7 @@ export class ResultsPageComponent implements OnInit {
       return;
     }
 
-    let paginatedProducts = this.searchService.getPaginatedProducts(
+    const paginatedProducts = this.searchService.getPaginatedProducts(
       this.products.length,
       this.isFiltered
     );
