@@ -21,10 +21,6 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
   private selectedVendors: [] = [];
   private subsHandler: Subscription[] = [];
 
-  @HostListener('window:scroll', ['$event']) onScroll(event) {
-    // this.pageYoffset = window.pageYOffset;
-  }
-
   pharmacies = new FormControl();
   pharmaciesList: string[] = [
     'Ahorro',
@@ -38,8 +34,9 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
     'Sams',
   ];
 
-  // TODOS
-  // Resultados "cerca de ti" al pedir locacion para coger la locacion del usuario y el ip
+  @HostListener('window:scroll', ['$event']) onScroll(event: any): void {
+    // this.pageYoffset = window.pageYOffset;
+  }
 
   constructor(
     private searchService: SearchService,
@@ -71,14 +68,14 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
       this.userInput = this.userInputLocal;
 
       if (this.isFiltered) {
-        this.searchService.search(
+        this.searchService.fetchProducts(
           this.userInput.toString(),
           this.selectedVendors
         );
         return;
       }
 
-      this.searchService.search(this.userInput.toString());
+      this.searchService.fetchProducts(this.userInput.toString());
     }
   }
 
@@ -106,7 +103,9 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
     this.isFiltered = true;
     this.selectedVendors = vendorNames.value;
 
-    if (!this.userInput) return;
+    if (!this.userInput) {
+      return;
+    }
 
     if (vendorNames.value.length === 0) {
       this.isFiltered = false;

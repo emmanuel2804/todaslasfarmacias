@@ -6,16 +6,17 @@ import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class SearchService {
-  private token: string = null;
-  private searchData: Data = null;
+  private token: string;
+  private searchData: Data;
   private products: [] = [];
   private products$ = new Subject<[]>();
   private filteredProducts: [] = [];
   private isLoading = false;
   private isLoadingSuject = new Subject<boolean>();
-  private userInput: string = null;
-  private userLocation: {} = null;
-  private userIp: {} = null;
+  private userInput: string;
+  private userLocation: {};
+  private userIp: {};
+  private mapKey: string;
 
   constructor(private http: HttpClient, private authServise: AuthService) {}
 
@@ -160,6 +161,16 @@ export class SearchService {
   }
 
   public getUserLocation(): void {
+    this.mapKey = this.authServise.getMapKey();
+
+    // navigator.permissions.query({name: 'geolocation'}).then((value) => {
+    //     if (value.state == 'granted') {
+    //       console.log('granted');
+    //     } else if (value.state == 'prompt') {
+    //       console.log('denied');
+    //     }
+    // },
+
     navigator.geolocation.getCurrentPosition((position) => {
       this.userLocation = {
         Cordinates: {
@@ -170,7 +181,7 @@ export class SearchService {
 
       this.http
         .get(
-          'http://api.positionstack.com/v1/reverse?access_key=a312128049ad32653aa031934c59a918&query=' +
+          `http://api.positionstack.com/v1/reverse?access_key=${this.mapKey}&query=` +
             position.coords.latitude +
             ',' +
             position.coords.longitude +
@@ -203,7 +214,7 @@ export class SearchService {
     );
   }
 
-  public search(userInput: string, vendorNames?: []): void {
+  public fetchProducts(userInput: string, vendorNames?: []): void {
     this.isLoading = true;
     this.isLoadingSuject.next(true);
     this.userInput = userInput;
@@ -211,7 +222,7 @@ export class SearchService {
 
     this.searchData = {
       userInput,
-      userLocation: this.userLocation != null ? this.userLocation : this.userIp,
+      userLocation: this.userLocation ? this.userLocation : this.userIp,
       date: new Date(),
     };
 

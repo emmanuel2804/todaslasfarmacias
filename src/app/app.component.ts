@@ -15,6 +15,9 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.authService.autoLogin();
-    this.searchService.getUserLocation();
+
+    setTimeout(() => {
+      this.searchService.getUserLocation();
+    }, 900);
   }
 }
