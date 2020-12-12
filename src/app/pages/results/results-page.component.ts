@@ -2,6 +2,7 @@ import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Product } from 'src/app/shared/product.model';
 import { SearchService } from 'src/app/shared/search.service';
 
 @Component({
@@ -16,7 +17,7 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
   public hasInapamDescount = true;
   public userInput: string = null;
   public userInputLocal: string = null;
-  public products: [] = [];
+  public products: Product[] = [];
   private isFiltered = false;
   private selectedVendors: [] = [];
   private subsHandler: Subscription[] = [];
@@ -262,6 +263,8 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.isLoading = false;
+
     if (this.subsHandler.length > 0) {
       this.subsHandler.forEach((subscription) => subscription.unsubscribe());
     }

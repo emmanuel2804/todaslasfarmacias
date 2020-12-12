@@ -1,6 +1,17 @@
 :host {
   min-height: 100% !important;
+  min-width: 100% !important;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+  right: 0;
+  bottom: 0;
+
   background-color: #424242;
+}
+
+img:focus {
+  outline: none;
 }
 
 // Mobile
@@ -40,12 +51,14 @@
 
 .searchbar-container-xs {
   height: 120px;
-  width: 100%;
+  width: 100% !important;
 
   z-index: 1000;
   position: relative;
 
   background-color: #fdd736;
+
+  // border-bottom: 2px solid rgb(39, 39, 39);
 
   -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.72);
   -moz-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.72);
@@ -246,7 +259,7 @@ input:focus {
 
   font-family: Raleway;
   font-style: normal;
-  font-weight: bold;
+  font-weight: normal;
   font-size: 15px;
   line-height: 24px !important;
 

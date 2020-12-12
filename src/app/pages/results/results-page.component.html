@@ -8,13 +8,13 @@
       routerLink="/home"
       >todaslasfarmacias.com</span
     >
-    <img
+    <!-- <img
       fxHide.xs
       class="logo"
       src="../../assets/images/logo/logo-yellow.png"
       alt="todaslasfarmacias.com"
       routerLink="/home"
-    />
+    /> -->
     <div
       fxHide.xs
       class="searchbar-container-xs"
@@ -245,7 +245,7 @@
       fxHide.xs
       fxHide.gt-md
       ngClass="logo"
-      src="../../assets/images/logo/logo-gray.png"
+      src="../../assets/images/logo/logo-gray.svg"
       alt="todaslasfarmacias.com"
       routerLink="/home"
     />
@@ -427,7 +427,9 @@
                       color: #fff !important;
                     "
                   >
-                    {{ product.price | currency }} MXN
+                    {{ product.price | currency }}
+                    <div style="width: 5px"></div>
+                    <span style="font-size: 18px">MXN</span>
                   </span>
                 </div>
                 <div
@@ -452,18 +454,20 @@
                         font-style: normal;
                         font-weight: bold;
 
-                        width: 134px;
+                        width: 152px;
                         margin-top: 4px;
-                        margin-bottom: 8px;
+                        margin-bottom: 10px;
 
                         color: #25e67e;
                         border-radius: 3px !important;
                       "
                     >
-                      <mat-icon fontSet="material-icons-outlined"
+                      <mat-icon
+                        fontSet="material-icons-outlined"
+                        style="font-size: 22px; padding-top: 2px"
                         >shopping_cart</mat-icon
                       >
-                      <span style="margin-left: 8px">Comprar</span>
+                      <span style="margin-left: 8px">Ir a comprar</span>
                     </button></a
                   >
                 </div>

@@ -2,23 +2,22 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, EMPTY } from 'rxjs';
 import { Data } from './data.model';
+import { Product } from './product.model';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class SearchService {
+  constructor(private http: HttpClient, private authServise: AuthService) {}
   private token: string;
+  private mapKey: string;
+  private userInput: string;
   private searchData: Data;
-  private products: [] = [];
-  private products$ = new Subject<[]>();
+  private userLocation: {};
+  private products: Product[] = [];
+  private products$ = new Subject<Product[]>();
   private filteredProducts: [] = [];
   private isLoading = false;
   private isLoadingSuject = new Subject<boolean>();
-  private userInput: string;
-  private userLocation: {};
-  private userIp: {};
-  private mapKey: string;
-
-  constructor(private http: HttpClient, private authServise: AuthService) {}
 
   public getUserInput(): string {
     if (this.userInput) {
@@ -35,7 +34,7 @@ export class SearchService {
     return this.isLoadingSuject.asObservable();
   }
 
-  public getProducts(): Observable<[]> {
+  public getProducts(): Observable<Product[]> {
     return this.products$.asObservable();
   }
 
@@ -48,7 +47,7 @@ export class SearchService {
   }
 
   public getProductsAfterFilering(): void {
-    const tempProducts: [] = [];
+    const tempProducts: Product[] = [];
 
     if (this.products.length <= 24) {
       this.products$.next([...this.products]);
@@ -62,9 +61,12 @@ export class SearchService {
     this.products$.next([...tempProducts]);
   }
 
-  public getPaginatedProducts(amountToSkip: number, filtered?: boolean): [] {
-    const paginatedProducts: [] = [];
-    let productsToSort: [] = [];
+  public getPaginatedProducts(
+    amountToSkip: number,
+    filtered?: boolean
+  ): Product[] {
+    const paginatedProducts: Product[] = [];
+    let productsToSort: Product[] = [];
 
     if (filtered) {
       productsToSort = this.filteredProducts;
@@ -160,57 +162,70 @@ export class SearchService {
     }
   }
 
-  public getUserLocation(): void {
-    this.mapKey = this.authServise.getMapKey();
-
-    // navigator.permissions.query({name: 'geolocation'}).then((value) => {
-    //     if (value.state == 'granted') {
-    //       console.log('granted');
-    //     } else if (value.state == 'prompt') {
-    //       console.log('denied');
-    //     }
-    // },
-
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.userLocation = {
+  private shareLocationAccepted = (position: Position): void => {
+    this.userLocation = {
+      Location: {
         Cordinates: {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         },
-      };
+      },
+      ip: null,
+    };
 
-      this.http
-        .get(
-          `http://api.positionstack.com/v1/reverse?access_key=${this.mapKey}&query=` +
-            position.coords.latitude +
-            ',' +
-            position.coords.longitude +
-            '&output=json'
-        )
-        .subscribe((response: any) => {
-          this.userLocation = { Location: response.data[0] };
+    this.http
+      .get(
+        `http://api.positionstack.com/v1/reverse?access_key=${this.mapKey}&query=` +
+          position.coords.latitude +
+          ',' +
+          position.coords.longitude +
+          '&output=json'
+      )
+      .subscribe((response: any) => {
+        this.userLocation = { Location: response.data[0], ip: null };
 
-          this.http.get('https://api.ipify.org/?format=json').subscribe(
-            (ipResponse: { ip: string }) => {
-              this.userLocation = {
-                Location: {
-                  geolocation: response.data[0],
-                  ip: ipResponse.ip,
-                },
-              };
-            },
-            (err) => EMPTY
-          );
-        });
-    });
+        this.http.get('https://api.ipify.org/?format=json').subscribe(
+          (ipRes: { ip: string }) => {
+            this.userLocation = {
+              Location: {
+                geolocation: response.data[0],
+                ip: ipRes.ip,
+                mk: 'GEO',
+              },
+            };
+          },
+          (err) => EMPTY
+        );
+      });
+  };
 
+  private shareLocationRejected = (error: PositionError): void => {
     this.http.get('https://api.ipify.org/?format=json').subscribe(
-      (response: { ip: string }) => {
-        this.userIp = {
-          ip: response.ip,
-        };
+      (ipRes: { ip: string }) => {
+        this.http
+          .get(
+            `http://api.positionstack.com/v1/reverse?access_key=${this.mapKey}&query=${ipRes.ip}&output=json`
+          )
+          .subscribe((response: any) => {
+            this.userLocation = {
+              Location: {
+                geolocation: response.data[0],
+                ip: ipRes.ip,
+                mk: 'IP',
+              },
+            };
+          });
       },
       (err) => EMPTY
+    );
+  };
+
+  public getUserLocation(): void {
+    this.mapKey = this.authServise.getMapKey();
+
+    navigator.geolocation.getCurrentPosition(
+      this.shareLocationAccepted,
+      this.shareLocationRejected
     );
   }
 
@@ -222,7 +237,7 @@ export class SearchService {
 
     this.searchData = {
       userInput,
-      userLocation: this.userLocation ? this.userLocation : this.userIp,
+      userLocation: this.userLocation ? this.userLocation : null,
       date: new Date(),
     };
 
@@ -243,7 +258,7 @@ export class SearchService {
           return;
         }
 
-        const paginatedProducts: [] = [];
+        const paginatedProducts: Product[] = [];
         if (this.products.length > 24) {
           let counter = 0;
           while (counter < 24) {
