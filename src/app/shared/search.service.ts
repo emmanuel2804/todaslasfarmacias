@@ -168,8 +168,37 @@ export class SearchService {
           Location: response,
         };
       },
-      (err) => EMPTY
+      (err) => {
+        this.getUserLocationIfAddBlock();
+      }
     );
+  }
+
+  private getUserLocationIfAddBlock(): void {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.userLocation = {
+        Location: {
+          Cordinates: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          },
+        },
+        ip: null,
+      };
+
+      this.http
+        .get(
+          'http://api.positionstack.com/v1/reverse?access_key=a312128049ad32653aa031934c59a918&query=' +
+            position.coords.latitude +
+            ',' +
+            position.coords.longitude +
+            '&output=json'
+        )
+        .subscribe((response: any) => {
+          this.userLocation = { Location: response.data[0], ip: null };
+          console.log(response.data[0]);
+        });
+    });
   }
 
   public fetchProducts(userInput: string, vendorNames?: []): void {
