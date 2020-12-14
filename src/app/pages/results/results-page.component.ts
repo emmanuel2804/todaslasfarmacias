@@ -70,13 +70,13 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
 
       if (this.isFiltered) {
         this.searchService.fetchProducts(
-          this.userInput.toString(),
+          this.userInput.toString().toLowerCase(),
           this.selectedVendors
         );
         return;
       }
 
-      this.searchService.fetchProducts(this.userInput.toString());
+      this.searchService.fetchProducts(this.userInput.toString().toLowerCase());
     }
   }
 

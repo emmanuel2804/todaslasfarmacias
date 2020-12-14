@@ -226,10 +226,10 @@ input:focus {
   color: #fdd736;
   background-color: #424242;
 
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
+  border-top-left-radius: 2px !important;
+  border-bottom-left-radius: 2px !important;
+  border-top-right-radius: 1px;
+  border-bottom-right-radius: 1px;
 }
 
 .search-button-xs {

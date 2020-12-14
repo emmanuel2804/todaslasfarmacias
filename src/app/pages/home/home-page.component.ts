@@ -16,7 +16,9 @@ export class HomePageComponent implements OnInit {
 
   public onSearch(): void {
     if (this.userInput) {
-      this.searchService.fetchProducts(this.userInput.toString());
+      this.searchService.fetchProducts(
+        this.userInput.toString().toLocaleLowerCase()
+      );
       this.router.navigate(['results']);
     }
   }

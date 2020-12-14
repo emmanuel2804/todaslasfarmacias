@@ -19,5 +19,9 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       this.searchService.getUserLocation();
     }, 900);
+
+    // this.searchService.saveVendorLink();
+    // this.searchService.saveVendorSelectors();
+    // this.searchService.search();
   }
 }

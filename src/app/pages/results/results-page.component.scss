@@ -2,10 +2,11 @@
   min-height: 100% !important;
   min-width: 100% !important;
 
-  overflow-y: scroll;
+  // overflow-y: scroll;
   overflow-x: hidden;
-  right: 0;
-  bottom: 0;
+  // right: 0;
+  // bottom: 0;
+  padding: 0px !important;
 
   background-color: #424242;
 }

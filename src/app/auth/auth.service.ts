@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 export class AuthService {
   private clientKey: string;
   private token: string;
-  private mapKey: string;
 
   constructor(private http: HttpClient) {}
 
@@ -32,28 +31,10 @@ export class AuthService {
       })
       .subscribe((tken) => {
         this.token = tken.token;
-        this.fetchMapKey();
-      });
-  }
-
-  private fetchMapKey(): void {
-    this.http
-      .get<{ mapKey: string }>(
-        'http://localhost:3000/api/search/product-images',
-        {
-          headers: { Authorization: 'Bearer ' + this.token },
-        }
-      )
-      .subscribe((mkey) => {
-        this.mapKey = mkey.mapKey;
       });
   }
 
   public getToken(): string {
     return this.token;
-  }
-
-  public getMapKey(): string {
-    return this.mapKey;
   }
 }

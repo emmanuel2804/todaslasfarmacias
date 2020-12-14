@@ -9,10 +9,9 @@ import { AuthService } from '../auth/auth.service';
 export class SearchService {
   constructor(private http: HttpClient, private authServise: AuthService) {}
   private token: string;
-  private mapKey: string;
   private userInput: string;
   private searchData: Data;
-  private userLocation: {};
+  private userLocation: any;
   private products: Product[] = [];
   private products$ = new Subject<Product[]>();
   private filteredProducts: [] = [];
@@ -162,70 +161,14 @@ export class SearchService {
     }
   }
 
-  private shareLocationAccepted = (position: Position): void => {
-    this.userLocation = {
-      Location: {
-        Cordinates: {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        },
-      },
-      ip: null,
-    };
-
-    this.http
-      .get(
-        `http://api.positionstack.com/v1/reverse?access_key=${this.mapKey}&query=` +
-          position.coords.latitude +
-          ',' +
-          position.coords.longitude +
-          '&output=json'
-      )
-      .subscribe((response: any) => {
-        this.userLocation = { Location: response.data[0], ip: null };
-
-        this.http.get('https://api.ipify.org/?format=json').subscribe(
-          (ipRes: { ip: string }) => {
-            this.userLocation = {
-              Location: {
-                geolocation: response.data[0],
-                ip: ipRes.ip,
-                mk: 'GEO',
-              },
-            };
-          },
-          (err) => EMPTY
-        );
-      });
-  };
-
-  private shareLocationRejected = (error: PositionError): void => {
-    this.http.get('https://api.ipify.org/?format=json').subscribe(
-      (ipRes: { ip: string }) => {
-        this.http
-          .get(
-            `http://api.positionstack.com/v1/reverse?access_key=${this.mapKey}&query=${ipRes.ip}&output=json`
-          )
-          .subscribe((response: any) => {
-            this.userLocation = {
-              Location: {
-                geolocation: response.data[0],
-                ip: ipRes.ip,
-                mk: 'IP',
-              },
-            };
-          });
+  public getUserLocation(): void {
+    this.http.get('https://ipapi.co/json/').subscribe(
+      (response) => {
+        this.userLocation = {
+          Location: response,
+        };
       },
       (err) => EMPTY
-    );
-  };
-
-  public getUserLocation(): void {
-    this.mapKey = this.authServise.getMapKey();
-
-    navigator.geolocation.getCurrentPosition(
-      this.shareLocationAccepted,
-      this.shareLocationRejected
     );
   }
 
@@ -269,6 +212,14 @@ export class SearchService {
         } else {
           this.products$.next(this.products);
         }
+      });
+  }
+
+  public search(): void {
+    this.http
+      .get('http://localhost:3000/api/search/api/v1/search/amoxicilina')
+      .subscribe((response) => {
+        console.log(response);
       });
   }
 }
