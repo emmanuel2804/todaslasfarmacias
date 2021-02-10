@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
+  private apiUrl = environment.apiUrl;
   private clientKey: string;
   private token: string;
 
@@ -14,7 +16,7 @@ export class AuthService {
 
   private fetchClientKey(): void {
     this.http
-      .get<{ clientKey: string }>('http://localhost:3000/api/user/app-logo')
+      .get<{ clientKey: string }>(this.apiUrl + 'api/user/app-logo')
       .subscribe((ckey) => {
         this.clientKey = ckey.clientKey;
         this.fetchToken();
@@ -26,7 +28,7 @@ export class AuthService {
       .post<{
         token: string;
         expiresIn: { date: Date; milliseconds: number };
-      }>('http://localhost:3000/api/user/login', {
+      }>(this.apiUrl + 'api/user/login', {
         clientKey: this.clientKey,
       })
       .subscribe((tken) => {

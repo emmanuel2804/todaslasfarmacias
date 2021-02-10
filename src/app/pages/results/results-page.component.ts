@@ -1,7 +1,9 @@
 import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { GoogleAnalyticsService } from 'src/app/google-analytics.service';
 import { Product } from 'src/app/shared/product.model';
 import { SearchService } from 'src/app/shared/search.service';
 
@@ -11,6 +13,18 @@ import { SearchService } from 'src/app/shared/search.service';
   styleUrls: ['./results-page.component.scss'],
 })
 export class ResultsPageComponent implements OnInit, OnDestroy {
+  control = new FormControl();
+  streets: string[] = [
+    'Ivermectina',
+    'Oseltamivir',
+    'Dexametasona',
+    'Azitromicina',
+    'Redoxón',
+    'Aderogyl',
+    'Paracetamol',
+  ];
+  filteredStreets: Observable<string[]>;
+  filters: string[];
   public lowerToHigherPrice = true;
   public noMore = false;
   public isLoading = false;
@@ -21,6 +35,7 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
   private isFiltered = false;
   private selectedVendors: [] = [];
   private subsHandler: Subscription[] = [];
+  public alternativeProducts = false;
 
   pharmacies = new FormControl();
   pharmaciesList: string[] = [
@@ -41,10 +56,18 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private searchService: SearchService,
-    private scroll: ViewportScroller
+    private scroll: ViewportScroller,
+    private analyticService: GoogleAnalyticsService
   ) {}
 
   public ngOnInit(): void {
+    const topSearches = this.searchService.fetchTopSearches();
+    if (topSearches !== null) {
+      topSearches.subscribe((result) => {
+        this.streets = result.map((m) => m.name);
+      });
+    }
+
     this.isLoading = this.searchService.getIsLoading();
     this.userInput = this.searchService.getUserInput();
     this.userInputLocal = this.userInput;
@@ -60,14 +83,77 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.sortProducts(products);
         this.products = products;
+
+        if (products.length == 0) this.alternativeSearch();
+      })
+    );
+
+    this.subsHandler.push(
+      this.searchService.getAlternativeProducts().subscribe((products) => {
+        this.isLoading = false;
+        this.sortProducts(products);
+        this.products = products;
+        this.alternativeProducts = true;
+      })
+    );
+
+    this.filteredStreets = this.control.valueChanges.pipe(
+      startWith(''),
+      map((value) => {
+        return this._filter(value);
       })
     );
   }
 
+  private _filter(value: string): string[] {
+    const filterValue = this._normalizeValue(value);
+    return this.streets
+      .filter((street) => this._normalizeValue(street).includes(filterValue))
+      .slice(0, 5);
+  }
+
+  private _normalizeValue(value: string): string {
+    try {
+      return value.toLowerCase().replace(/\s/g, '');
+    } catch (error) {
+      return value;
+    }
+  }
+
+  private alternativeSearch() {
+    console.log(`alternative search con ${this.userInput}`);
+    this.searchService.fetchTopSearches().subscribe((result) => {
+      this.streets = result.map((m) => m.name);
+
+      let dist = 2 ** 32;
+      this.streets.forEach((s) => {
+        const newDist = this.searchService.Levenshtein(
+          this.userInputLocal.toLowerCase(),
+          s.toLowerCase()
+        );
+        console.log(`${this.userInputLocal}, ${s} = ${newDist}`);
+
+        if (newDist < dist) {
+          dist = newDist;
+          this.userInput = s.toLowerCase();
+        }
+      });
+
+      console.log(`Busqueda laternativa con ${this.userInput}`);
+      console.log('Listado de comparacion:');
+      console.log(this.streets);
+
+      this.searchService.fetchAlternativeProducts(
+        this.userInput.toString().toLowerCase()
+      );
+    });
+  }
+
   public onSearch(): void {
+    this.alternativeProducts = false;
     if (this.userInputLocal) {
       this.userInput = this.userInputLocal;
-
+      this.analyticService.eventEmitter(this.userInput.toString());
       if (this.isFiltered) {
         this.searchService.fetchProducts(
           this.userInput.toString().toLowerCase(),
@@ -77,6 +163,10 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
       }
 
       this.searchService.fetchProducts(this.userInput.toString().toLowerCase());
+
+      this.searchService.fetchTopSearches().subscribe((result) => {
+        this.streets = result.map((m) => m.name);
+      });
     }
   }
 

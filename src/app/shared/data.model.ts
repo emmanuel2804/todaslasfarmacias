@@ -3,3 +3,8 @@ export interface Data {
   userLocation: {};
   date: Date;
 }
+
+export interface IMedicine {
+  name: string;
+  count: number;
+}

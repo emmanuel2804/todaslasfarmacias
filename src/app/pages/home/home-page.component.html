@@ -42,7 +42,17 @@
       [(ngModel)]="userInput"
       placeholder="ejemplo: Ibuprofeno"
       (keyup.enter)="onSearch()"
+      [formControl]="control"
+      [matAutocomplete]="auto"
     />
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let street of filteredStreets | async"
+        [value]="street"
+      >
+        {{ street }}
+      </mat-option>
+    </mat-autocomplete>
     <button
       ngClass="search-button"
       ngClass.xs="search-button-xs"

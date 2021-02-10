@@ -26,7 +26,18 @@
         [(ngModel)]="userInputLocal"
         placeholder="ejemplo: Ibuprofeno"
         (keyup.enter)="onSearch()"
+        [formControl]="control"
+        [matAutocomplete]="auto"
       />
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let street of filteredStreets | async"
+          [value]="street"
+        >
+          {{ street }}
+        </mat-option>
+      </mat-autocomplete>
       <button class="search-button-xs" mat-raised-button (click)="onSearch()">
         Buscar
       </button>
@@ -57,7 +68,17 @@
           [(ngModel)]="userInputLocal"
           placeholder="ejemplo: Ibuprofeno"
           (keyup.enter)="onSearch()"
+          [formControl]="control"
+          [matAutocomplete]="auto"
         />
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let street of filteredStreets | async"
+            [value]="street"
+          >
+            {{ street }}
+          </mat-option>
+        </mat-autocomplete>
         <button class="search-button-xs" mat-raised-button (click)="onSearch()">
           Buscar
         </button>
@@ -120,6 +141,20 @@
       alt="Top Banner Add"
     />
   </div>
+  <div
+    *ngIf="alternativeProducts"
+    class="spinner-wrapper"
+    fxFlex
+    fxLayoutAlign="center center"
+    style="margin-bottom: 15px"
+  >
+    <mat-label class="not-found">
+      <h1>Producto no encontrado</h1>
+      <p *ngIf="userInput" class="mostrando-resultados-para-a">
+        Mostrando resultados para: “{{ userInput }}”
+      </p>
+    </mat-label>
+  </div>
 
   <div
     *ngIf="isLoading"
@@ -133,11 +168,16 @@
     </div>
   </div>
 
-  <div *ngIf="!isLoading && products.length > 0" id="cards-wrapper-xs">
+  <div
+    *ngIf="!isLoading && products.length > 0"
+    id="cards-wrapper-xs"
+    style="margin: 15px; border-top: 1.2px solid #272727"
+  >
     <div
       class="card-xs animate__fadeIn"
       fxLayout
       *ngFor="let product of products"
+      style="border-right: 1.2px solid #272727; background-color: #333333a6"
     >
       <div
         id="product-image-wrapper-xs"
@@ -145,7 +185,7 @@
         fxLayoutAlign="start center"
       >
         <img
-          src="{{ vendorLogoCheck(product.vendor) }}"
+          src="{{ vendorLogoCheck(product.verndor) }}"
           style="height: 15px; left: 11px; margin-top: 2px"
           alt="Product Image"
         />
@@ -271,7 +311,17 @@
         [(ngModel)]="userInputLocal"
         placeholder="ejemplo: Ibuprofeno"
         (keyup.enter)="onSearch()"
+        [formControl]="control"
+        [matAutocomplete]="auto"
       />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let street of filteredStreets | async"
+          [value]="street"
+        >
+          {{ street }}
+        </mat-option>
+      </mat-autocomplete>
       <button id="search-button" mat-raised-button (click)="onSearch()">
         Buscar
       </button>
@@ -362,14 +412,32 @@
             >
           </div>
 
-          <div
+          <!-- <div
             *ngIf="products.length === 0 && !isLoading"
             class="spinner-wrapper"
             style="width: 682px; height: 341px"
-          ></div>
+          >
+            <mat-label class="not-found">
+              <h1>Producto no encontrado</h1>
+              <p>inténtelo más tarde</p>
+            </mat-label>
+          </div> -->
 
           <div *ngIf="!isLoading && products.length > 0">
-            <div id="top-separator"></div>
+            <div
+              *ngIf="alternativeProducts"
+              class="spinner-wrapper"
+              style="width: 682px; margin-bottom: 15px"
+            >
+              <mat-label class="not-found">
+                <h1>Producto no encontrado</h1>
+                <p *ngIf="userInput" class="mostrando-resultados-para-a">
+                  Mostrando resultados para: “{{ userInput }}”
+                </p>
+              </mat-label>
+            </div>
+
+            <div *ngIf="!alternativeProducts" id="top-separator"></div>
 
             <div
               *ngFor="let product of products"
@@ -384,7 +452,7 @@
               >
                 <img
                   id="vendor-logo"
-                  src="{{ vendorLogoCheck(product.vendor) }}"
+                  src="{{ vendorLogoCheck(product.verndor) }}"
                   alt="Logo"
                 />
                 <img id="image" src="{{ product.image }}" alt="Product Image" />
