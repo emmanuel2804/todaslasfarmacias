@@ -1,14 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { NavigationEnd, Router } from "@angular/router";
-import { AuthService } from "./auth/auth.service";
-import { SearchService } from "./shared/search.service";
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { AuthService } from './auth/auth.service';
+import { SearchService } from './shared/search.service';
 declare let gtag: Function;
 declare let fbq: Function;
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   constructor(
@@ -23,8 +23,8 @@ export class AppComponent implements OnInit {
 
     this.router.events.subscribe((y: NavigationEnd) => {
       if (y instanceof NavigationEnd) {
-        gtag("config", "AW-392105663", { page_path: y.url });
-        fbq("track", "PageView");
+        gtag('config', 'AW-392105663', { page_path: y.url });
+        fbq('track', 'PageView');
       }
     });
   }
