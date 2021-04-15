@@ -1,0 +1,16 @@
+<div class="dialog-container">
+  <h1 mat-dialog-title>Hola</h1>
+  <div mat-dialog-content>
+    <p>
+      Envienos su direccion de correo y nos pondremos en contacto con usted.
+      Muchas gracias por elegirnos.
+    </p>
+    <mat-form-field>
+      <mat-label>ejemplo@todaslasfarmacias.com</mat-label>
+      <input matInput [(ngModel)]="data.animal" />
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Enviar</button>
+  </div>
+</div>

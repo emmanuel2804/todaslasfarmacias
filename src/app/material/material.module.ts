@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatIconModule,
     MatSelectModule,
     MatAutocompleteModule,
+    MatDialogModule,
   ],
   exports: [
     MatInputModule,
@@ -20,6 +22,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatIconModule,
     MatSelectModule,
     MatAutocompleteModule,
+    MatDialogModule,
   ],
 })
 export class MaterialModule {}

@@ -14,9 +14,19 @@ import { SearchService } from './shared/search.service';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './pages/home/home-page.component';
 import { ResultsPageComponent } from './pages/results/results-page.component';
+import {
+  DialogOverviewExampleDialog,
+  FooterComponent,
+} from './footer/footer.component';
 
 @NgModule({
-  declarations: [AppComponent, HomePageComponent, ResultsPageComponent],
+  declarations: [
+    AppComponent,
+    HomePageComponent,
+    ResultsPageComponent,
+    FooterComponent,
+    DialogOverviewExampleDialog,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
 
     this.router.events.subscribe((y: NavigationEnd) => {
       if (y instanceof NavigationEnd) {
-        gtag('config', 'AW-392105663', { page_path: y.url });
+        gtag('config', 'G-31HE386NF9', { page_path: y.url });
         fbq('track', 'PageView');
       }
     });

@@ -28,6 +28,7 @@
         (keyup.enter)="onSearch()"
         [formControl]="control"
         [matAutocomplete]="auto"
+        style="border-radius: 10px 0 0 10px"
       />
       />
       <mat-autocomplete #auto="matAutocomplete">
@@ -38,7 +39,12 @@
           {{ street }}
         </mat-option>
       </mat-autocomplete>
-      <button class="search-button-xs" mat-raised-button (click)="onSearch()">
+      <button
+        class="search-button-xs"
+        mat-raised-button
+        (click)="onSearch()"
+        style="border-radius: 0 10px 10px 0 !important"
+      >
         Buscar
       </button>
     </div>
@@ -70,6 +76,7 @@
           (keyup.enter)="onSearch()"
           [formControl]="control"
           [matAutocomplete]="auto"
+          style="border-radius: 10px 0 0 10px"
         />
         <mat-autocomplete #auto="matAutocomplete">
           <mat-option
@@ -79,7 +86,12 @@
             {{ street }}
           </mat-option>
         </mat-autocomplete>
-        <button class="search-button-xs" mat-raised-button (click)="onSearch()">
+        <button
+          class="search-button-xs"
+          mat-raised-button
+          (click)="onSearch()"
+          style="border-radius: 0 10px 10px 0 !important"
+        >
           Buscar
         </button>
       </div>
@@ -117,6 +129,7 @@
           >
             <mat-label>Selecionar farmacia</mat-label>
             <mat-select
+              panelClass="b-10"
               [formControl]="pharmacies"
               multiple
               #vendorSelector
@@ -137,7 +150,7 @@
   <div id="add-container-xs" fxFlex fxLayoutAlign="center center">
     <img
       src="../../../assets/images/top-banner-add-xs.png"
-      style="height: 50px; width: 320px; margin: 12px"
+      style="height: 50px; width: 320px; margin: 12px; border-radius: 10px"
       alt="Top Banner Add"
     />
   </div>
@@ -156,101 +169,111 @@
     </mat-label>
   </div>
 
-  <div
-    *ngIf="isLoading"
-    id="spinner-container"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    style="height: 100%; width: 100%; margin-top: 32%"
-  >
-    <div id="spinner-wrapper">
-      <span class="loader"><span class="loader-inner"></span></span>
-    </div>
-  </div>
-
-  <div
-    *ngIf="!isLoading && products.length > 0"
-    id="cards-wrapper-xs"
-    style="margin: 15px; border-top: 1.2px solid #272727"
-  >
+  <div style="min-height: 350px">
     <div
-      class="card-xs animate__fadeIn"
-      fxLayout
-      *ngFor="let product of products"
-      style="border-right: 1.2px solid #272727; background-color: #333333a6"
+      *ngIf="isLoading"
+      id="spinner-container"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      style="height: 100%; width: 100%; margin-top: 32%"
+    >
+      <div id="spinner-wrapper">
+        <span class="loader"><span class="loader-inner"></span></span>
+      </div>
+    </div>
+
+    <div
+      *ngIf="!isLoading && products.length > 0"
+      id="cards-wrapper-xs"
+      style="margin: 15px"
     >
       <div
-        id="product-image-wrapper-xs"
-        fxLayout="column"
-        fxLayoutAlign="start center"
+        class="card-xs animate__fadeIn"
+        fxLayout
+        *ngFor="let product of products"
+        style="
+          border: 1.2px solid #272727;
+          border-radius: 10px;
+          background-color: #333333a6;
+          margin: 4px;
+        "
       >
-        <img
-          src="{{ vendorLogoCheck(product.verndor) }}"
-          style="height: 15px; left: 11px; margin-top: 2px"
-          alt="Product Image"
-        />
-        <img
-          id="product-image-xs"
-          src="{{ product.image }}"
-          alt="Product Image"
-        />
-      </div>
-      <div fxFlex fxLayout="column">
-        <div class="name-comprar-wrapper" fxLayoutAlign="space-between center">
-          <span id="product-name-xs">{{ product.name }}</span>
+        <div
+          id="product-image-wrapper-xs"
+          fxLayout="column"
+          fxLayoutAlign="start center"
+          style="border-radius: 10px 0 0 10px"
+        >
+          <img
+            src="{{ vendorLogoCheck(product.verndor) }}"
+            style="height: 15px; left: 11px; margin-top: 2px"
+            alt="Product Image"
+          />
+          <img
+            id="product-image-xs"
+            src="{{ product.image }}"
+            alt="Product Image"
+          />
         </div>
-        <div fxFlex fxLayoutAlign="space-between end">
-          <span id="inapam-descount-xs">{{
-            discountCheckXs(product.vendor)
-          }}</span>
-          <div fxLayout>
-            <a
-              href="{{ product.link }}"
-              fxLayoutAlign="start start"
-              style="text-decoration: none"
-              target="_blank"
-            >
-              <div
-                fxLayoutAlign="center"
-                style="
-                  font-family: Raleway;
-                  font-style: normal;
-                  font-weight: bold;
-                  font-size: 20px !important;
-
-                  margin-right: 8px;
-                  margin-bottom: 6px;
-
-                  color: #25e67e;
-                "
+        <div fxFlex fxLayout="column">
+          <div
+            class="name-comprar-wrapper"
+            fxLayoutAlign="space-between center"
+          >
+            <span id="product-name-xs">{{ product.name }}</span>
+          </div>
+          <div fxFlex fxLayoutAlign="space-between end">
+            <span id="inapam-descount-xs">{{
+              discountCheckXs(product.vendor)
+            }}</span>
+            <div fxLayout>
+              <a
+                href="{{ product.link }}"
+                fxLayoutAlign="start start"
+                style="text-decoration: none"
+                target="_blank"
               >
-                <mat-icon id="cart-icon-xs" fontSet="material-icons-outlined"
-                  >shopping_cart</mat-icon
+                <div
+                  fxLayoutAlign="center"
+                  style="
+                    font-family: Raleway;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 20px !important;
+
+                    margin-right: 8px;
+                    margin-bottom: 6px;
+
+                    color: #25e67e;
+                  "
                 >
-                <span id="product-price-xs"
-                  >{{ product.price | currency }}
-                  <span style="font-size: 14px"> MXN</span></span
-                >
-              </div></a
-            >
+                  <mat-icon id="cart-icon-xs" fontSet="material-icons-outlined"
+                    >shopping_cart</mat-icon
+                  >
+                  <span id="product-price-xs"
+                    >{{ product.price | currency }}
+                    <span style="font-size: 14px"> MXN</span></span
+                  >
+                </div></a
+              >
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div id="mas-resultados-button-container" fxLayoutAlign="center">
-      <button
-        *ngIf="!noMore"
-        id="mas-resultados-button-xs"
-        mat-button
-        (click)="onPagination()"
-        [disabled]="noMore"
-      >
-        Más resultados
-      </button>
-      <span *ngIf="noMore" id="fin-de-resultados-xs">Fin de resultados</span>
+      <div id="mas-resultados-button-container" fxLayoutAlign="center">
+        <button
+          *ngIf="!noMore"
+          id="mas-resultados-button-xs"
+          mat-button
+          (click)="onPagination()"
+          [disabled]="noMore"
+        >
+          Más resultados
+        </button>
+        <span *ngIf="noMore" id="fin-de-resultados-xs">Fin de resultados</span>
+      </div>
     </div>
   </div>
-
   <button
     id="scroll-top-fab-xs"
     mat-fab
@@ -259,6 +282,7 @@
   >
     <mat-icon>keyboard_arrow_up</mat-icon>
   </button>
+  <app-footer style="width: 100%"></app-footer>
 </div>
 
 <!-- Desktop -->
@@ -313,6 +337,7 @@
         (keyup.enter)="onSearch()"
         [formControl]="control"
         [matAutocomplete]="auto"
+        style="border-radius: 10px 0 0 10px"
       />
       <mat-autocomplete #auto="matAutocomplete">
         <mat-option
@@ -322,7 +347,12 @@
           {{ street }}
         </mat-option>
       </mat-autocomplete>
-      <button id="search-button" mat-raised-button (click)="onSearch()">
+      <button
+        id="search-button"
+        mat-raised-button
+        (click)="onSearch()"
+        style="border-radius: 0 10px 10px 0 !important"
+      >
         Buscar
       </button>
     </div>
@@ -365,6 +395,7 @@
             <mat-form-field appearance="none">
               <mat-label>Selecionar farmacia</mat-label>
               <mat-select
+                panelClass="b-10"
                 [formControl]="pharmacies"
                 multiple
                 (selectionChange)="onFilterProducts($event)"
@@ -389,11 +420,13 @@
       </div>
     </div>
     <div class="top-add-container" fxLayout fxLayoutAlign="center center">
-      <img
-        src="../../assets/images/f_kmw9wg9t0.jpeg"
-        style="width: 728px; height: 90px"
-        alt="Top Add Banner"
-      />
+      <a href="https://www.youmatter.mx/" target="_blank">
+        <img
+          src="../../assets/images/f_kmw9wg9t0.jpeg"
+          style="width: 728px; height: 90px; border-radius: 10px"
+          alt="Top Add Banner"
+        />
+      </a>
     </div>
     <div class="bottom-container" fxLayout="column" fxFlexAlign="center center">
       <div fxLayout fxLayoutAlign="center">
@@ -437,18 +470,23 @@
               </mat-label>
             </div>
 
-            <div *ngIf="!alternativeProducts" id="top-separator"></div>
+            <!-- <div *ngIf="!alternativeProducts" id="top-separator"></div> -->
 
             <div
               *ngFor="let product of products"
               class="card animate__fadeIn"
-              style="border-right: 1.2px solid #272727"
+              style="
+                border-right: 1.2px solid #272727;
+                border-radius: 10px;
+                margin: 4px;
+              "
               fxLayoutAlign="start start"
             >
               <div
                 id="card-image-container"
                 fxLayout="column"
                 fxLayoutAlign="start center"
+                style="border-radius: 10px 0 0 10px"
               >
                 <img
                   id="vendor-logo"
@@ -554,16 +592,28 @@
           </div>
 
           <div fxHide.lt-md id="side-adds-container">
-            <img
-              src="../../../assets/images/f_kmw8xu730.jpeg"
-              style="height: 250px; width: 300px"
-              alt="Add"
-            />
-            <img
-              src="../../../assets/images/side-banner-add-reference.jpg"
-              style="height: 250px; width: 300px; margin-top: 30px"
-              alt="Add"
-            />
+            <a
+              href="https://www.farmaciasanpablo.com.mx/quedate-en-casa"
+              target="_blank"
+            >
+              <img
+                src="../../../assets/images/f_kmw8xu730.jpeg"
+                style="height: 250px; width: 300px; border-radius: 10px"
+                alt="Add"
+              />
+            </a>
+            <a href="https://www.benavides.com.mx/prevencion" target="_blank">
+              <img
+                src="../../../assets/images/side-banner-add-3.jpg"
+                style="
+                  height: 250px;
+                  width: 300px;
+                  margin-top: 30px;
+                  border-radius: 10px;
+                "
+                alt="Add"
+              />
+            </a>
           </div>
         </div>
       </div>
@@ -577,4 +627,5 @@
   >
     <mat-icon style="font-weight: Bold">keyboard_arrow_up</mat-icon>
   </button>
+  <app-footer style="width: 100%"></app-footer>
 </div>

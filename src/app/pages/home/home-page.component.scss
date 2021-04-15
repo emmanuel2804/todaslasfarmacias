@@ -2,6 +2,17 @@ body {
   background-color: #fdd736 !important;
 }
 
+.help-text {
+  // margin-top: 60px;
+  text-align: center;
+  padding: 0 6%;
+}
+
+.mat-icon {
+  font-size: 60px;
+  margin-right: 20px;
+}
+
 .logo-container {
   width: 775px;
   height: 276px;
@@ -18,7 +29,7 @@ body {
   height: 162px;
   width: 160px;
 
-  margin-top: 6%;
+  margin-top: 20px;
   margin-bottom: 24px;
 }
 
@@ -26,7 +37,7 @@ body {
   height: 120px;
   width: 116px;
 
-  margin-top: 24%;
+  margin-top: 33%;
   margin-bottom: 24px;
 }
 
@@ -122,7 +133,7 @@ body {
 }
 
 .searchbar-container {
-  margin-top: 80px;
+  margin-top: 40px;
 }
 
 .searchbar-container-xs {
@@ -226,10 +237,10 @@ input:focus {
   color: #fdd736;
   background-color: #424242;
 
-  border-top-left-radius: 2px !important;
-  border-bottom-left-radius: 2px !important;
-  border-top-right-radius: 1px;
-  border-bottom-right-radius: 1px;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .search-button-xs {
@@ -247,21 +258,24 @@ input:focus {
 
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .bottom-text-container {
   // width: 261px;
-  height: 20px;
+  text-align: center;
+  width: 600px;
+  // height: 20px;
 
   // margin-top: 71px;
-  margin-top: 81px;
+  margin-top: 40px;
 }
 
 .bottom-text-container-xs {
-  width: 228px;
-  height: 20px;
+  text-align: center;
+  width: 280px;
+  // height: 20px;
 
   margin-top: 40px;
 }
