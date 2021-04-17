@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { GoogleAnalyticsService } from 'src/app/google-analytics.service';
 import { SearchService } from 'src/app/shared/search.service';
@@ -11,8 +11,9 @@ import { SearchService } from 'src/app/shared/search.service';
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
   control = new FormControl();
+  private subsHandler: Subscription[] = [];
   streets: string[] = [
     'Ivermectina',
     'Oseltamivir',
@@ -30,20 +31,36 @@ export class HomePageComponent implements OnInit {
   constructor(
     private searchService: SearchService,
     private router: Router,
+    private route: ActivatedRoute,
     private analyticService: GoogleAnalyticsService
   ) {}
 
-  public ngOnInit(): void {
-    const topSearches = this.searchService.fetchTopSearches();
-    if (topSearches !== null) {
-      topSearches.subscribe((result) => {
-        this.streets = result.map((m) => m.name);
-      });
+  ngOnDestroy(): void {
+    if (this.subsHandler.length > 0) {
+      this.subsHandler.forEach((subscription) => subscription.unsubscribe());
     }
+  }
+
+  ngAfterViewInit(): void {
+    const query: string = this.route.snapshot.queryParamMap.get('query');
+    if (query) {
+      this.userInput = query;
+      this.onSearch();
+    }
+  }
+
+  public ngOnInit(): void {
+    this.searchService.fetchTopSearches();
 
     this.filteredStreets = this.control.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value))
+    );
+
+    this.subsHandler.push(
+      this.searchService.getTopSearches().subscribe((topSearches) => {
+        this.streets = topSearches.map((m) => m.name);
+      })
     );
   }
 

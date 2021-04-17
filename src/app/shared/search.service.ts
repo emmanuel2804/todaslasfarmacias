@@ -9,12 +9,13 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class SearchService {
   constructor(private http: HttpClient, private authServise: AuthService) {}
-  private token: string;
   private userInput: string;
   private searchData: Data;
   private userLocation: any;
   private products: Product[] = [];
   private products$ = new Subject<Product[]>();
+  private topSearches: IMedicine[] = [];
+  private topSearches$ = new Subject<IMedicine[]>();
   private alternativeProducts$ = new Subject<Product[]>();
   private filteredProducts: [] = [];
   private isLoading = false;
@@ -38,6 +39,10 @@ export class SearchService {
 
   public getProducts(): Observable<Product[]> {
     return this.products$.asObservable();
+  }
+
+  public getTopSearches(): Observable<IMedicine[]> {
+    return this.topSearches$.asObservable();
   }
 
   public getAlternativeProducts(): Observable<Product[]> {
@@ -250,13 +255,22 @@ export class SearchService {
   //     });
   // }
 
-  public fetchTopSearches(): Observable<IMedicine[]> {
-    this.token = this.authServise.getToken();
+  public fetchTopSearches(): void {
+    this.isLoading = true;
+    this.isLoadingSuject.next(true);
 
-    if (this.token === undefined) return null;
+    this.authServise.getToken().subscribe((token) => {
+      if (token === undefined) return null;
 
-    return this.http.get<IMedicine[]>(this.apiUrl + 'api/search/top-searches', {
-      headers: { Authorization: 'Bearer ' + this.token },
+      this.http
+        .get<IMedicine[]>(this.apiUrl + 'api/search/top-searches', {
+          headers: { Authorization: 'Bearer ' + token },
+        })
+        .subscribe((topSearches) => {
+          this.topSearches = topSearches;
+          this.topSearches$.next(this.topSearches);
+          this.isLoadingSuject.next(false);
+        });
     });
   }
 
@@ -264,24 +278,80 @@ export class SearchService {
     this.isLoading = true;
     this.isLoadingSuject.next(true);
     this.userInput = userInput;
-    this.token = this.authServise.getToken();
+    this.authServise.getToken().subscribe((token) => {
+      this.searchData = {
+        userInput,
+        userLocation: this.userLocation ? this.userLocation : null,
+        date: new Date(),
+      };
 
-    this.searchData = {
-      userInput,
-      userLocation: this.userLocation ? this.userLocation : null,
-      date: new Date(),
-    };
+      this.http
+        .post<any>(
+          this.apiUrl + 'api/search/products/' + userInput,
+          { searchData: this.searchData },
+          {
+            headers: { Authorization: 'Bearer ' + token },
+          }
+        )
+        .subscribe(
+          (response) => {
+            this.isLoadingSuject.next(false);
+            this.products = response;
 
-    this.http
-      .post<any>(
-        this.apiUrl + 'api/search/products/' + userInput,
-        { searchData: this.searchData },
-        {
-          headers: { Authorization: 'Bearer ' + this.token },
-        }
-      )
-      .subscribe(
-        (response) => {
+            if (vendorNames && vendorNames.length > 0) {
+              this.filterProducts(vendorNames);
+              return;
+            }
+
+            const paginatedProducts: Product[] = [];
+            if (this.products.length > 24) {
+              let counter = 0;
+              while (counter < 24) {
+                paginatedProducts.push(this.products[counter]);
+                counter++;
+              }
+              this.products$.next(paginatedProducts);
+            } else {
+              this.products$.next(this.products);
+            }
+          },
+          (error) => {
+            // console.log(error);
+            this.isLoadingSuject.next(false);
+            if (error.status === 404) {
+              this.http
+                .post<any>(
+                  this.apiUrl + 'api/search/top-searches/' + userInput,
+                  { searchData: this.searchData },
+                  {
+                    headers: { Authorization: 'Bearer ' + token },
+                  }
+                )
+                .subscribe((result) => {
+                  console.log('llego de borrar el medicine');
+                  this.products$.next([]);
+                });
+            }
+          }
+        );
+    });
+  }
+
+  public fetchAlternativeProducts(userInput: string, vendorNames?: []): void {
+    this.isLoading = true;
+    this.isLoadingSuject.next(true);
+    this.userInput = userInput;
+
+    this.authServise.getToken().subscribe((token) => {
+      this.http
+        .post<any>(
+          this.apiUrl + 'api/search/products/' + userInput,
+          { searchData: this.searchData },
+          {
+            headers: { Authorization: 'Bearer ' + token },
+          }
+        )
+        .subscribe((response) => {
           this.isLoadingSuject.next(false);
           this.products = response;
 
@@ -297,67 +367,12 @@ export class SearchService {
               paginatedProducts.push(this.products[counter]);
               counter++;
             }
-            this.products$.next(paginatedProducts);
+            this.alternativeProducts$.next(paginatedProducts);
           } else {
-            this.products$.next(this.products);
+            this.alternativeProducts$.next(this.products);
           }
-        },
-        (error) => {
-          // console.log(error);
-          this.isLoadingSuject.next(false);
-          if (error.status === 404) {
-            this.http
-              .post<any>(
-                this.apiUrl + 'api/search/top-searches/' + userInput,
-                { searchData: this.searchData },
-                {
-                  headers: { Authorization: 'Bearer ' + this.token },
-                }
-              )
-              .subscribe((result) => {
-                console.log('llego de borrar el medicine');
-                this.products$.next([]);
-              });
-          }
-        }
-      );
-  }
-
-  public fetchAlternativeProducts(userInput: string, vendorNames?: []): void {
-    this.isLoading = true;
-    this.isLoadingSuject.next(true);
-    this.userInput = userInput;
-    this.token = this.authServise.getToken();
-
-    this.http
-      .post<any>(
-        this.apiUrl + 'api/search/products/' + userInput,
-        { searchData: this.searchData },
-        {
-          headers: { Authorization: 'Bearer ' + this.token },
-        }
-      )
-      .subscribe((response) => {
-        this.isLoadingSuject.next(false);
-        this.products = response;
-
-        if (vendorNames && vendorNames.length > 0) {
-          this.filterProducts(vendorNames);
-          return;
-        }
-
-        const paginatedProducts: Product[] = [];
-        if (this.products.length > 24) {
-          let counter = 0;
-          while (counter < 24) {
-            paginatedProducts.push(this.products[counter]);
-            counter++;
-          }
-          this.alternativeProducts$.next(paginatedProducts);
-        } else {
-          this.alternativeProducts$.next(this.products);
-        }
-      });
+        });
+    });
   }
 
   // Levenshtein(String, String) -> Integer

@@ -61,12 +61,7 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    const topSearches = this.searchService.fetchTopSearches();
-    if (topSearches !== null) {
-      topSearches.subscribe((result) => {
-        this.streets = result.map((m) => m.name);
-      });
-    }
+    this.searchService.fetchTopSearches();
 
     this.isLoading = this.searchService.getIsLoading();
     this.userInput = this.searchService.getUserInput();
@@ -84,7 +79,14 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
         this.sortProducts(products);
         this.products = products;
 
-        if (products.length == 0) this.alternativeSearch();
+        // if (products.length == 0) this.alternativeSearch();
+      })
+    );
+
+    this.subsHandler.push(
+      this.searchService.getTopSearches().subscribe((topSearches) => {
+        this.isLoading = false;
+        this.streets = topSearches.map((m) => m.name);
       })
     );
 
@@ -120,34 +122,34 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  private alternativeSearch() {
-    console.log(`alternative search con ${this.userInput}`);
-    this.searchService.fetchTopSearches().subscribe((result) => {
-      this.streets = result.map((m) => m.name);
+  // private alternativeSearch() {
+  //   console.log(`alternative search con ${this.userInput}`);
+  //   this.searchService.fetchTopSearches().subscribe((result) => {
+  //     this.streets = result.map((m) => m.name);
 
-      let dist = 2 ** 32;
-      this.streets.forEach((s) => {
-        const newDist = this.searchService.Levenshtein(
-          this.userInputLocal.toLowerCase(),
-          s.toLowerCase()
-        );
-        console.log(`${this.userInputLocal}, ${s} = ${newDist}`);
+  //     let dist = 2 ** 32;
+  //     this.streets.forEach((s) => {
+  //       const newDist = this.searchService.Levenshtein(
+  //         this.userInputLocal.toLowerCase(),
+  //         s.toLowerCase()
+  //       );
+  //       console.log(`${this.userInputLocal}, ${s} = ${newDist}`);
 
-        if (newDist < dist) {
-          dist = newDist;
-          this.userInput = s.toLowerCase();
-        }
-      });
+  //       if (newDist < dist) {
+  //         dist = newDist;
+  //         this.userInput = s.toLowerCase();
+  //       }
+  //     });
 
-      console.log(`Busqueda laternativa con ${this.userInput}`);
-      console.log('Listado de comparacion:');
-      console.log(this.streets);
+  //     console.log(`Busqueda laternativa con ${this.userInput}`);
+  //     console.log('Listado de comparacion:');
+  //     console.log(this.streets);
 
-      this.searchService.fetchAlternativeProducts(
-        this.userInput.toString().toLowerCase()
-      );
-    });
-  }
+  //     this.searchService.fetchAlternativeProducts(
+  //       this.userInput.toString().toLowerCase()
+  //     );
+  //   });
+  // }
 
   public onSearch(): void {
     this.alternativeProducts = false;
@@ -163,10 +165,7 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
       }
 
       this.searchService.fetchProducts(this.userInput.toString().toLowerCase());
-
-      this.searchService.fetchTopSearches().subscribe((result) => {
-        this.streets = result.map((m) => m.name);
-      });
+      this.searchService.fetchTopSearches();
     }
   }
 

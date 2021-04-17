@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { SearchService } from './shared/search.service';
 declare let gtag: Function;
@@ -13,6 +13,7 @@ declare let fbq: Function;
 export class AppComponent implements OnInit {
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private searchService: SearchService
   ) {}
