@@ -275,6 +275,7 @@ export class SearchService {
   }
 
   public fetchProducts(userInput: string, vendorNames?: []): void {
+    this.authServise.autoLogin();
     this.isLoading = true;
     this.isLoadingSuject.next(true);
     this.userInput = userInput;

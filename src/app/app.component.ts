@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
+import { SEOService } from './seo.service';
 import { SearchService } from './shared/search.service';
 declare let gtag: Function;
 declare let fbq: Function;
@@ -15,12 +16,15 @@ export class AppComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private seoService: SEOService
   ) {}
 
   public ngOnInit(): void {
     this.authService.autoLogin();
     this.searchService.getUserLocation();
+    this.seoService.updateTitle('Esto es un titulo de prueba');
+    this.seoService.updateDescription('esto es una descripcion de prueba');
 
     this.router.events.subscribe((y: NavigationEnd) => {
       if (y instanceof NavigationEnd) {

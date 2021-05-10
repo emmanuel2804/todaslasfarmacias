@@ -1,6 +1,7 @@
 import { ViewportScroller } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { GoogleAnalyticsService } from 'src/app/google-analytics.service';
@@ -57,15 +58,42 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
   constructor(
     private searchService: SearchService,
     private scroll: ViewportScroller,
+    private route: ActivatedRoute,
+    private router: Router,
     private analyticService: GoogleAnalyticsService
   ) {}
 
   public ngOnInit(): void {
-    this.searchService.fetchTopSearches();
+    // this.searchService.fetchTopSearches();
 
     this.isLoading = this.searchService.getIsLoading();
     this.userInput = this.searchService.getUserInput();
     this.userInputLocal = this.userInput;
+
+    this.subsHandler.push(
+      this.route.queryParamMap.subscribe((params) => {
+        this.userInputLocal = params.get('query');
+        console.log(params);
+        console.log(this.userInputLocal);
+        this.alternativeProducts = false;
+        if (this.userInputLocal) {
+          this.userInput = this.userInputLocal;
+          this.analyticService.eventEmitter(this.userInput.toString());
+          if (this.isFiltered) {
+            this.searchService.fetchProducts(
+              this.userInput.toString().toLowerCase(),
+              this.selectedVendors
+            );
+            return;
+          }
+
+          this.searchService.fetchProducts(
+            this.userInput.toString().toLowerCase()
+          );
+          this.searchService.fetchTopSearches();
+        }
+      })
+    );
 
     this.subsHandler.push(
       this.searchService.getIsLoadingSuject().subscribe((isLoading) => {
@@ -152,21 +180,29 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
   // }
 
   public onSearch(): void {
-    this.alternativeProducts = false;
-    if (this.userInputLocal) {
-      this.userInput = this.userInputLocal;
-      this.analyticService.eventEmitter(this.userInput.toString());
-      if (this.isFiltered) {
-        this.searchService.fetchProducts(
-          this.userInput.toString().toLowerCase(),
-          this.selectedVendors
-        );
-        return;
-      }
+    // const query: string = this.route.snapshot.queryParamMap.get('query');
+    // if (!query && this.userInputLocal)
+    this.router.navigate(['results'], {
+      queryParams: {
+        query: this.userInputLocal.toString().toLocaleLowerCase(),
+      },
+    });
 
-      this.searchService.fetchProducts(this.userInput.toString().toLowerCase());
-      this.searchService.fetchTopSearches();
-    }
+    // this.alternativeProducts = false;
+    // if (this.userInputLocal) {
+    //   this.userInput = this.userInputLocal;
+    //   this.analyticService.eventEmitter(this.userInput.toString());
+    //   if (this.isFiltered) {
+    //     this.searchService.fetchProducts(
+    //       this.userInput.toString().toLowerCase(),
+    //       this.selectedVendors
+    //     );
+    //     return;
+    //   }
+
+    //   this.searchService.fetchProducts(this.userInput.toString().toLowerCase());
+    //   this.searchService.fetchTopSearches();
+    // }
   }
 
   public onSortProducts(incomingProducts?: []): void {

@@ -85,7 +85,9 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
       this.searchService.fetchProducts(
         this.userInput.toString().toLocaleLowerCase()
       );
-      this.router.navigate(['results']);
+      this.router.navigate(['results'], {
+        queryParams: { query: this.userInput.toString().toLocaleLowerCase() },
+      });
     }
   }
 }

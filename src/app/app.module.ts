@@ -10,6 +10,7 @@ import { MaterialModule } from './material/material.module';
 
 import { AuthService } from './auth/auth.service';
 import { SearchService } from './shared/search.service';
+import { SEOService } from './seo.service';
 
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './pages/home/home-page.component';
@@ -37,7 +38,7 @@ import {
     MaterialModule,
     HttpClientModule,
   ],
-  providers: [AuthService, SearchService],
+  providers: [AuthService, SearchService, SEOService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
