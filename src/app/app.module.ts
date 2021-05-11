@@ -19,6 +19,7 @@ import {
   DialogOverviewExampleDialog,
   FooterComponent,
 } from './footer/footer.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -27,9 +28,10 @@ import {
     ResultsPageComponent,
     FooterComponent,
     DialogOverviewExampleDialog,
+    NotFoundComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     BrowserAnimationsModule,
     FlexLayoutModule,

@@ -23,8 +23,10 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     this.authService.autoLogin();
     this.searchService.getUserLocation();
-    this.seoService.updateTitle('Esto es un titulo de prueba');
-    this.seoService.updateDescription('esto es una descripcion de prueba');
+    // this.seoService.updateTitle('Esto es un titulo de prueba');
+    // this.seoService.updateDescription(
+    //   'Busque en más de 100000 medicamentos de diferentes farmacias para encontrar los precios más baratos'
+    // );
 
     this.router.events.subscribe((y: NavigationEnd) => {
       if (y instanceof NavigationEnd) {
