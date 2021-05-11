@@ -29,7 +29,7 @@ export class MetadataService {
   constructor(
     private metaTagService: Meta,
     private titleService: Title,
-    @Inject(HOST_URL) private hostUrl: string,
+    // @Inject(HOST_URL) private hostUrl: string,
     private router: Router
   ) {}
 
@@ -44,7 +44,8 @@ export class MetadataService {
     this.metaTagService.addTags(
       [
         ...metatags,
-        { property: 'og:url', content: `${this.hostUrl}${this.router.url}` },
+        // { property: 'og:url', content: `${this.hostUrl}${this.router.url}` },
+        { property: 'og:url', content: `${this.router.url}` },
         { name: 'robots', content: index ? 'index, follow' : 'noindex' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { 'http-equiv': 'Content-Type', content: 'text/html; charset=utf-8' },
@@ -72,7 +73,8 @@ export class MetadataService {
 
       {
         property: 'og:image',
-        content: `${this.hostUrl}${metadata.imageRelativeUrl}`,
+        // content: `${this.hostUrl}${metadata.imageRelativeUrl}`,
+        content: `${metadata.imageRelativeUrl}`,
       },
     ];
   }
