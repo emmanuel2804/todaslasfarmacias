@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/todas-las-farmacias/browser",
+            "outputPath": "dist/todas-las-farmacias",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -149,9 +149,7 @@
           "options": {
             "browserTarget": "todas-las-farmacias:build:production",
             "serverTarget": "todas-las-farmacias:server:production",
-            "routes": [
-              "/"
-            ]
+            "routes": ["/"]
           },
           "configurations": {
             "production": {}

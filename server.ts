@@ -67,7 +67,7 @@ export function app(): express.Express {
       });
     } else {
       console.log('No SSR');
-      res.sendFile(path.join(__dirname, '../browser/index.html'));
+      res.sendFile(path.join(__dirname, '../index.html'));
     }
   });
 
