@@ -40,7 +40,9 @@ jobs:
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
         script: |
+          cd /var/www/html/
+          rm -r todas-las-farmacias/
+          mv ~/dist/todas-las-farmacias/ ./
           pm2 restart front-universal-server
-          ls
-          cd new
-          ls
+          systemctl restart apache2
+          
