@@ -14,7 +14,7 @@ export interface PageMetadata {
 
 const defaultMetadata: PageMetadata = {
   title: 'Todas las Farmacias',
-  imageRelativeUrl: '/assets/images/android-chrome-512x512.png',
+  imageRelativeUrl: './assets/images/android-chrome-512x512.png',
   description:
     'Busque en más de 100000 medicamentos de diferentes farmacias para encontrar los precios más baratos',
   author: 'Byt.bz',
