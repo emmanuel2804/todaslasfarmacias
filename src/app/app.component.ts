@@ -1,7 +1,6 @@
 import { Component, OnInit, Optional } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
-import { MetadataService } from './metadata.service';
 import { SEOService } from './seo.service';
 import { SearchService } from './shared/search.service';
 declare let gtag: Function;
@@ -18,8 +17,7 @@ export class AppComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private searchService: SearchService,
-    private seoService: SEOService,
-    @Optional() private metadataService: MetadataService
+    private seoService: SEOService
   ) {}
 
   public ngOnInit(): void {
@@ -29,14 +27,6 @@ export class AppComponent implements OnInit {
     // this.seoService.updateDescription(
     //   'Busque en más de 100000 medicamentos de diferentes farmacias para encontrar los precios más baratos'
     // );
-
-    if (this.metadataService) {
-      this.metadataService.updateMetadata({
-        title: 'Todas las Farmacias',
-        description:
-          'Busque en más de 100000 medicamentos de diferentes farmacias para encontrar los precios más baratos',
-      });
-    }
 
     this.router.events.subscribe((y: NavigationEnd) => {
       if (y instanceof NavigationEnd) {

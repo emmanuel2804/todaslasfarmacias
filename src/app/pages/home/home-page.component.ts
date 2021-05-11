@@ -1,9 +1,16 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  OnDestroy,
+  Optional,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { GoogleAnalyticsService } from 'src/app/google-analytics.service';
+import { MetadataService } from 'src/app/metadata.service';
 import { SearchService } from 'src/app/shared/search.service';
 
 @Component({
@@ -32,7 +39,8 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
     private searchService: SearchService,
     private router: Router,
     private route: ActivatedRoute,
-    private analyticService: GoogleAnalyticsService
+    private analyticService: GoogleAnalyticsService,
+    @Optional() private metadataService: MetadataService
   ) {}
 
   ngOnDestroy(): void {
@@ -50,6 +58,14 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    if (this.metadataService) {
+      this.metadataService.updateMetadata({
+        title: 'Todas las Farmacias',
+        description:
+          'Busque en más de 100000 medicamentos de diferentes farmacias para encontrar los precios más baratos',
+      });
+    }
+
     this.searchService.fetchTopSearches();
 
     this.filteredStreets = this.control.valueChanges.pipe(
