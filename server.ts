@@ -49,6 +49,14 @@ export function app(): express.Express {
   );
 
   // All regular routes use the Universal engine
+  server.get(
+    '*.png|jpg',
+    express.static(imagesFolder, {
+      maxAge: '1y',
+    })
+  );
+
+  // All regular routes use the Universal engine
   server.get('*', (req: express.Request, res: express.Response) => {
     // url where the app is hosted; will be useful for generating meta tags (e.g. https://app-domain.com/)
     const hostUrl = req.protocol + '://' + req.get('Host');
@@ -67,9 +75,6 @@ export function app(): express.Express {
       });
     } else {
       console.log('No SSR');
-      // console.log(__dirname);
-      // console.log(path.join(__dirname, '../browser/index.html'));
-      // console.log(path.join('../browser/index.html'));
       res.sendFile(path.join(__dirname, '../browser/index.html'));
     }
   });
