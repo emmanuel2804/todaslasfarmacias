@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
-import { HOST_URL } from './tokens/host-url';
 import { Router } from '@angular/router';
-import { Location, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 
 export interface PageMetadata {
   title: string;
@@ -15,7 +14,7 @@ export interface PageMetadata {
 
 const defaultMetadata: PageMetadata = {
   title: 'Todas las Farmacias',
-  imageRelativeUrl: '/assets/images/android-chrome-512x512.png',
+  imageRelativeUrl: 'assets/images/android-chrome-512x512.png',
   description:
     'Busque en más de 100000 medicamentos de diferentes farmacias para encontrar los precios más baratos',
   author: 'Byt.bz',
@@ -32,14 +31,9 @@ export class MetadataService {
   constructor(
     private metaTagService: Meta,
     private titleService: Title,
-    // @Inject(HOST_URL) private hostUrl: string,
-    // @Inject('ORIGIN_URL') public baseUrl: string,
     @Inject(DOCUMENT) private document: Document,
-    private router: Router,
-    private location: Location
+    private router: Router
   ) {
-    // console.log(`ORIGIN_URL=${baseUrl}`);
-    console.log(this.location);
     this.url = this.document.URL;
   }
 

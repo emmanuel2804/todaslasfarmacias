@@ -39,7 +39,7 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
     private searchService: SearchService,
     private router: Router,
     private route: ActivatedRoute,
-    private analyticService: GoogleAnalyticsService,
+    @Optional() private analyticService: GoogleAnalyticsService,
     @Optional() private metadataService: MetadataService
   ) {}
 
@@ -98,7 +98,9 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public onSearch(): void {
     if (this.userInput) {
-      this.analyticService.eventEmitter(this.userInput.toString());
+      if (this.analyticService)
+        this.analyticService.eventEmitter(this.userInput.toString());
+
       this.searchService.fetchProducts(
         this.userInput.toString().toLocaleLowerCase()
       );

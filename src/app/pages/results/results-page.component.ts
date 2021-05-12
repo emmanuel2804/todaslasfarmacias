@@ -1,5 +1,11 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  Optional,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
@@ -60,7 +66,7 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
     private scroll: ViewportScroller,
     private route: ActivatedRoute,
     private router: Router,
-    private analyticService: GoogleAnalyticsService
+    @Optional() private analyticService: GoogleAnalyticsService
   ) {
     // this.filteredStreets = of(this.streets);
   }
@@ -74,14 +80,15 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
 
     this.subsHandler.push(
       this.route.queryParamMap.subscribe((params) => {
-        console.log('Sub de la ruta');
         this.userInputLocal = params.get('query');
-        console.log(params);
-        console.log(this.userInputLocal);
         this.alternativeProducts = false;
+
         if (this.userInputLocal) {
           this.userInput = this.userInputLocal;
-          this.analyticService.eventEmitter(this.userInput.toString());
+
+          if (this.analyticService)
+            this.analyticService.eventEmitter(this.userInput.toString());
+
           if (this.isFiltered) {
             this.searchService.fetchProducts(
               this.userInput.toString().toLowerCase(),
@@ -106,7 +113,6 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
 
     this.subsHandler.push(
       this.searchService.getProducts().subscribe((products) => {
-        console.log('Fetch on reslut component');
         this.isLoading = false;
         this.sortProducts(products);
         this.products = products;

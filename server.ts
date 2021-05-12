@@ -9,14 +9,12 @@ import { APP_BASE_HREF } from '@angular/common';
 import { existsSync } from 'fs';
 import * as isbot from 'isbot';
 import * as path from 'path';
-import { HOST_URL } from 'src/app/tokens/host-url';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
   const distFolder = path.join(__dirname, '../browser');
   // const distFolder = join(process.cwd(), 'todas-las-farmacias/browser');
-  console.log(distFolder);
   const imagesFolder = path.join(__dirname, '../browser/assets/images');
   // const imagesFolder = join(
   //   process.cwd(),
