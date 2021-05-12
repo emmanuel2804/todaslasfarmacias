@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
 import { HOST_URL } from './tokens/host-url';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { Location, DOCUMENT } from '@angular/common';
 
 export interface PageMetadata {
   title: string;
@@ -27,16 +27,20 @@ const defaultMetadata: PageMetadata = {
   providedIn: 'root',
 })
 export class MetadataService {
+  url = '';
+
   constructor(
     private metaTagService: Meta,
     private titleService: Title,
     // @Inject(HOST_URL) private hostUrl: string,
     // @Inject('ORIGIN_URL') public baseUrl: string,
+    @Inject(DOCUMENT) private document: Document,
     private router: Router,
     private location: Location
   ) {
     // console.log(`ORIGIN_URL=${baseUrl}`);
     console.log(this.location);
+    this.url = this.document.URL;
   }
 
   public updateMetadata(
@@ -50,7 +54,7 @@ export class MetadataService {
     this.metaTagService.addTags(
       [
         ...metatags,
-        { property: 'og:url', content: `${location.origin}${this.router.url}` },
+        { property: 'og:url', content: `${this.url}${this.router.url}` },
         // { property: 'og:url', content: `${this.router.url}` },
         { name: 'robots', content: index ? 'index, follow' : 'noindex' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -79,7 +83,7 @@ export class MetadataService {
 
       {
         property: 'og:image',
-        content: `${location.origin}${metadata.imageRelativeUrl}`,
+        content: `${this.url}${metadata.imageRelativeUrl}`,
         // content: `${metadata.imageRelativeUrl}`,
       },
     ];

@@ -1,5 +1,5 @@
-import { Location } from '@angular/common';
-import { Component, OnInit, Optional } from '@angular/core';
+import { DOCUMENT, Location } from '@angular/common';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { SEOService } from './seo.service';
@@ -19,8 +19,11 @@ export class AppComponent implements OnInit {
     private authService: AuthService,
     private searchService: SearchService,
     private seoService: SEOService,
-    private location: Location
-  ) {}
+    private location: Location,
+    @Inject(DOCUMENT) private document: Document
+  ) {
+    console.log(this.document.URL);
+  }
 
   public ngOnInit(): void {
     // this.location.subscribe((url) => {
