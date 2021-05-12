@@ -264,7 +264,7 @@ export class SearchService {
     this.isLoadingSuject.next(true);
 
     this.authServise.getToken().subscribe((token) => {
-      if (token === undefined) return null;
+      if (!token) return;
 
       this.http
         .get<IMedicine[]>(this.apiUrl + 'api/search/top-searches', {
@@ -287,14 +287,14 @@ export class SearchService {
     this.isLoadingSuject.next(true);
     this.userInput = userInput;
     this.authServise.getToken().subscribe((token) => {
+      console.log('sub del token');
+      if (!token) return;
+
       this.searchData = {
         userInput,
         userLocation: this.userLocation ? this.userLocation : null,
         date: new Date(),
       };
-      console.log('sub del token');
-
-      if (!token) return;
 
       this.http
         .post<any>(
