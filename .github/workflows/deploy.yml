@@ -32,17 +32,17 @@ jobs:
         source: "./dist/todas-las-farmacias/"
         target: "~/"
 
-    # - name: Executing remote command
-    #   uses: appleboy/ssh-action@master
-    #   with:
-    #     HOST: ${{ secrets.HOST }}
-    #     USERNAME: ${{ secrets.USERNAME }}
-    #     PORT: ${{ secrets.PORT }}
-    #     KEY: ${{ secrets.SSHKEY }}
-    #     script: |
-    #       cd /var/www/html/
-    #       rm -r todas-las-farmacias/
-    #       mv ~/dist/todas-las-farmacias/ ./
-    #       pm2 restart front-universal-server
-    #       systemctl restart apache2
+    - name: Executing remote command
+      uses: appleboy/ssh-action@master
+      with:
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: ${{ secrets.PORT }}
+        KEY: ${{ secrets.SSHKEY }}
+        script: |
+          cd /var/www/html/
+          rm -r todas-las-farmacias/
+          mv ~/dist/todas-las-farmacias/ ./
+          pm2 restart front-universal-server
+          systemctl restart apache2
           
