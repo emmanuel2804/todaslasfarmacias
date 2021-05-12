@@ -61,6 +61,7 @@ export class SearchService {
     const tempProducts: Product[] = [];
 
     if (this.products.length <= 24) {
+      console.log('change');
       this.products$.next([...this.products]);
       return;
     }
@@ -69,6 +70,7 @@ export class SearchService {
       tempProducts.push(this.products[counter]);
       counter++;
     }
+    console.log('change');
     this.products$.next([...tempProducts]);
   }
 
@@ -113,6 +115,7 @@ export class SearchService {
     this.filteredProducts = this.sortProducts(tempProducts, true);
 
     if (this.filteredProducts.length <= 24) {
+      console.log('change');
       this.products$.next([...this.filteredProducts]);
     } else {
       const paginatedFilteredProducts = [];
@@ -127,6 +130,7 @@ export class SearchService {
         paginatedFilteredProducts.push(this.filteredProducts[counter]);
         counter++;
       }
+      console.log('change');
       this.products$.next([...(paginatedFilteredProducts as [])]);
     }
   }
@@ -275,7 +279,10 @@ export class SearchService {
   }
 
   public fetchProducts(userInput: string, vendorNames?: []): void {
+    console.log(`Fetch with ${userInput}`);
     this.authServise.autoLogin();
+    this.products = [];
+    this.products$.next([]);
     this.isLoading = true;
     this.isLoadingSuject.next(true);
     this.userInput = userInput;
@@ -285,6 +292,9 @@ export class SearchService {
         userLocation: this.userLocation ? this.userLocation : null,
         date: new Date(),
       };
+      console.log('sub del token');
+
+      if (!token) return;
 
       this.http
         .post<any>(
@@ -311,8 +321,10 @@ export class SearchService {
                 paginatedProducts.push(this.products[counter]);
                 counter++;
               }
+              console.log('change');
               this.products$.next(paginatedProducts);
             } else {
+              console.log('change');
               this.products$.next(this.products);
             }
           },
@@ -330,6 +342,7 @@ export class SearchService {
                 )
                 .subscribe((result) => {
                   console.log('llego de borrar el medicine');
+                  console.log('change');
                   this.products$.next([]);
                 });
             }

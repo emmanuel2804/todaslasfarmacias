@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable()
@@ -8,12 +8,17 @@ export class AuthService {
   private apiUrl = environment.apiUrl;
   private clientKey: string;
   private token: string;
-  private token$ = new Subject<string>();
+  private token$ = new BehaviorSubject<string>('');
 
   constructor(private http: HttpClient) {}
 
   public autoLogin(): void {
-    this.fetchClientKey();
+    this.token$.asObservable().subscribe((token) => {
+      if (!token) {
+        console.log(token);
+        this.fetchClientKey();
+      }
+    });
   }
 
   private fetchClientKey(): void {
