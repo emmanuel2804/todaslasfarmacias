@@ -9,7 +9,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { existsSync } from 'fs';
 import * as isbot from 'isbot';
 import * as path from 'path';
-import { HOST_URL } from './src/app/tokens/host-url';
+import { HOST_URL } from 'src/app/tokens/host-url';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -60,6 +60,10 @@ export function app(): express.Express {
   server.get('*', (req: express.Request, res: express.Response) => {
     // url where the app is hosted; will be useful for generating meta tags (e.g. https://app-domain.com/)
     const hostUrl = req.protocol + '://' + req.get('Host');
+    const http =
+      req.headers['x-forwarded-proto'] === undefined
+        ? 'http'
+        : req.headers['x-forwarded-proto'];
 
     // check whether User-Agent is bot
     if (isbot(req.header('User-Agent'))) {
@@ -70,7 +74,10 @@ export function app(): express.Express {
           { provide: APP_BASE_HREF, useValue: req.baseUrl },
 
           // inject hostUrl to become available in Angular DI system on the server
-          { provide: HOST_URL, useValue: hostUrl },
+          {
+            provide: 'ORIGIN_URL',
+            useValue: `${http}://${req.headers.host}`,
+          },
         ],
       });
     } else {

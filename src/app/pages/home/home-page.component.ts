@@ -59,6 +59,7 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit(): void {
     if (this.metadataService) {
+      console.log('mandaron el metadata service');
       this.metadataService.updateMetadata({
         title: 'Todas las Farmacias',
         description:

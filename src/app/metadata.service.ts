@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
 import { HOST_URL } from './tokens/host-url';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 export interface PageMetadata {
   title: string;
@@ -30,8 +31,13 @@ export class MetadataService {
     private metaTagService: Meta,
     private titleService: Title,
     // @Inject(HOST_URL) private hostUrl: string,
-    private router: Router
-  ) {}
+    // @Inject('ORIGIN_URL') public baseUrl: string,
+    private router: Router,
+    private location: Location
+  ) {
+    // console.log(`ORIGIN_URL=${baseUrl}`);
+    console.log(this.location);
+  }
 
   public updateMetadata(
     metadata: Partial<PageMetadata>,
