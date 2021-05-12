@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit, Optional } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
@@ -17,10 +18,14 @@ export class AppComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private searchService: SearchService,
-    private seoService: SEOService
+    private seoService: SEOService,
+    private location: Location
   ) {}
 
   public ngOnInit(): void {
+    // this.location.subscribe((url) => {
+    //   console.log(url);
+    // });
     this.authService.autoLogin();
     this.searchService.getUserLocation();
     // this.seoService.updateTitle('Esto es un titulo de prueba');

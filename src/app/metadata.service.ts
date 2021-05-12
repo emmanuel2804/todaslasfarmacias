@@ -50,7 +50,7 @@ export class MetadataService {
     this.metaTagService.addTags(
       [
         ...metatags,
-        { property: 'og:url', content: `${this.location}${this.router.url}` },
+        { property: 'og:url', content: `${location.origin}${this.router.url}` },
         // { property: 'og:url', content: `${this.router.url}` },
         { name: 'robots', content: index ? 'index, follow' : 'noindex' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -79,7 +79,7 @@ export class MetadataService {
 
       {
         property: 'og:image',
-        content: `${this.location}${metadata.imageRelativeUrl}`,
+        content: `${location.origin}${metadata.imageRelativeUrl}`,
         // content: `${metadata.imageRelativeUrl}`,
       },
     ];
