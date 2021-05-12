@@ -14,11 +14,14 @@ import { HOST_URL } from 'src/app/tokens/host-url';
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
-  const distFolder = join(process.cwd(), 'todas-las-farmacias/browser');
-  const imagesFolder = join(
-    process.cwd(),
-    'todas-las-farmacias/browser/assets/images'
-  );
+  const distFolder = path.join(__dirname, '../browser');
+  // const distFolder = join(process.cwd(), 'todas-las-farmacias/browser');
+  console.log(distFolder);
+  const imagesFolder = path.join(__dirname, '../browser/assets/images');
+  // const imagesFolder = join(
+  //   process.cwd(),
+  //   'todas-las-farmacias/browser/assets/images'
+  // );
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? 'index.original.html'
     : 'index';
