@@ -21,18 +21,13 @@ jobs:
     - run: npm run build:ssr
     - run: cd ./dist/todas-las-farmacias
 
-    - run: echo $PORT
-    - run: echo $USERNAME
-    - run: echo $HOST
-    - run: echo $KEY
-
     - name: Copy repository contents via scp
       uses: appleboy/scp-action@master
       env:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
+        PASSWORD: ${{ secrets.PASSWORD }}
       with:
         source: "./dist/todas-las-farmacias/"
         target: "~/"
@@ -43,7 +38,7 @@ jobs:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
+        PASSWORD: ${{ secrets.PASSWORD }}
         script: |
           cd /var/www/html/
           rm -r todas-las-farmacias/
