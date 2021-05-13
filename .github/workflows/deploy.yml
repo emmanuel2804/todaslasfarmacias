@@ -27,7 +27,7 @@ jobs:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
-        PASSWORD: ${{ secrets.PASSWORD }}
+        KEY: ${{ secrets.KEY }}
       with:
         source: "./dist/todas-las-farmacias/"
         target: "~/"
@@ -38,7 +38,7 @@ jobs:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
-        PASSWORD: ${{ secrets.PASSWORD }}
+        KEY: ${{ secrets.KEY }}
         script: |
           cd /var/www/html/
           rm -r todas-las-farmacias/
