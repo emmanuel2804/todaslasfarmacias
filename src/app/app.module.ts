@@ -18,8 +18,11 @@ import { ResultsPageComponent } from './pages/results/results-page.component';
 import {
   DialogOverviewExampleDialog,
   FooterComponent,
-} from './footer/footer.component';
+} from './layout/footer/footer.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { TestResultComponent } from './pages/test-result/test-result.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { SearchBarComponent } from './layout/search-bar/search-bar.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,9 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     FooterComponent,
     DialogOverviewExampleDialog,
     NotFoundComponent,
+    TestResultComponent,
+    HeaderComponent,
+    SearchBarComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
