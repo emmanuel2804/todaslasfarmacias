@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { GoogleAnalyticsService } from 'src/app/google-analytics.service';
+import { MetadataService } from 'src/app/metadata.service';
 import { Product } from 'src/app/shared/product.model';
 import { SearchService } from 'src/app/shared/search.service';
 
@@ -66,7 +67,8 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
     private scroll: ViewportScroller,
     private route: ActivatedRoute,
     private router: Router,
-    @Optional() private analyticService: GoogleAnalyticsService
+    @Optional() private analyticService: GoogleAnalyticsService,
+    @Optional() private metadataService: MetadataService
   ) {
     // this.filteredStreets = of(this.streets);
   }
@@ -117,6 +119,15 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
         this.sortProducts(products);
         this.products = products;
 
+        if (this.metadataService) {
+          console.log('mandaron el metadata service');
+          this.metadataService.updateMetadata({
+            title: 'Todas las Farmacias',
+            description: `Para este producto encuentre precios desde ${this.products[0].price}`,
+            imageRelativeUrl: this.products[0].image,
+            keywords: [this.userInputLocal],
+          });
+        }
         // if (products.length == 0) this.alternativeSearch();
       })
     );

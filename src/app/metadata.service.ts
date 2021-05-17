@@ -6,6 +6,7 @@ import { DOCUMENT } from '@angular/common';
 export interface PageMetadata {
   title: string;
   imageRelativeUrl: string;
+  imageUrl: string;
   description: string;
   author: string;
   keywords: string[];
@@ -15,6 +16,7 @@ export interface PageMetadata {
 const defaultMetadata: PageMetadata = {
   title: 'Todas las Farmacias',
   imageRelativeUrl: 'assets/images/android-chrome-512x512.png',
+  imageUrl: '',
   description:
     'Busque en más de 100000 medicamentos de diferentes farmacias para encontrar los precios más baratos',
   author: 'Byt.bz',
@@ -49,7 +51,6 @@ export class MetadataService {
       [
         ...metatags,
         { property: 'og:url', content: `${this.url}${this.router.url}` },
-        // { property: 'og:url', content: `${this.router.url}` },
         { name: 'robots', content: index ? 'index, follow' : 'noindex' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { 'http-equiv': 'Content-Type', content: 'text/html; charset=utf-8' },
@@ -61,25 +62,46 @@ export class MetadataService {
   }
 
   private generateMetaDefinitions(metadata: PageMetadata): MetaDefinition[] {
-    return [
-      { name: 'title', content: metadata.title },
-      { property: 'og:title', content: metadata.title },
+    if (!metadata.imageUrl) {
+      return [
+        { name: 'title', content: metadata.title },
+        { property: 'og:title', content: metadata.title },
 
-      { name: 'description', content: metadata.description },
-      { property: 'og:description', content: metadata.description },
+        { name: 'description', content: metadata.description },
+        { property: 'og:description', content: metadata.description },
 
-      { name: 'author', content: metadata.author },
-      { property: 'og:author', content: metadata.author },
+        { name: 'author', content: metadata.author },
+        { property: 'og:author', content: metadata.author },
 
-      { name: 'keywords', content: metadata.keywords.join(', ') },
+        { name: 'keywords', content: metadata.keywords.join(', ') },
 
-      { property: 'og:type', content: metadata.type },
+        { property: 'og:type', content: metadata.type },
 
-      {
-        property: 'og:image',
-        content: `${this.url}${metadata.imageRelativeUrl}`,
-        // content: `${metadata.imageRelativeUrl}`,
-      },
-    ];
+        {
+          property: 'og:image',
+          content: `${this.url}${metadata.imageRelativeUrl}`,
+        },
+      ];
+    } else {
+      return [
+        { name: 'title', content: metadata.title },
+        { property: 'og:title', content: metadata.title },
+
+        { name: 'description', content: metadata.description },
+        { property: 'og:description', content: metadata.description },
+
+        { name: 'author', content: metadata.author },
+        { property: 'og:author', content: metadata.author },
+
+        { name: 'keywords', content: metadata.keywords.join(', ') },
+
+        { property: 'og:type', content: metadata.type },
+
+        {
+          property: 'og:image',
+          content: metadata.imageUrl,
+        },
+      ];
+    }
   }
 }

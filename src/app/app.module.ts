@@ -20,6 +20,8 @@ import {
   FooterComponent,
 } from './footer/footer.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { TestPrintComponent } from './pages/test-print/test-print.component';
+import { ResultsWrapperComponent } from './pages/results-wrapper/results-wrapper.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     FooterComponent,
     DialogOverviewExampleDialog,
     NotFoundComponent,
+    TestPrintComponent,
+    ResultsWrapperComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
