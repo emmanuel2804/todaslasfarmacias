@@ -74,6 +74,14 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    if (this.metadataService) {
+      console.log('mandaron el metadata service');
+      this.metadataService.updateMetadata({
+        title: 'Todas las Farmacias',
+        description:
+          'Busque en más de 100000 medicamentos de diferentes farmacias para encontrar los precios más baratos',
+      });
+    }
     // this.searchService.fetchTopSearches();
 
     this.isLoading = this.searchService.getIsLoading();
