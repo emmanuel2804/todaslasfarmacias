@@ -36,7 +36,7 @@ export class MetadataService {
     @Inject(DOCUMENT) private document: Document,
     private router: Router
   ) {
-    this.url = this.document.URL;
+    this.url = this.document.location.origin + '/';
   }
 
   public updateMetadata(

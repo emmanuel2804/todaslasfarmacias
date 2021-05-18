@@ -69,13 +69,8 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     @Optional() private analyticService: GoogleAnalyticsService,
-    @Optional() private metadataService: MetadataService,
-    @Inject(DOCUMENT) private document: Document
-  ) {
-    // this.filteredStreets = of(this.streets);
-    console.log(this.document.location);
-    console.log(this.document.location.origin);
-  }
+    @Optional() private metadataService: MetadataService
+  ) {}
 
   public ngOnInit(): void {
     if (this.metadataService) {
