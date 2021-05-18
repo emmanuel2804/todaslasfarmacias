@@ -1,7 +1,8 @@
-import { ViewportScroller } from '@angular/common';
+import { DOCUMENT, ViewportScroller } from '@angular/common';
 import {
   Component,
   HostListener,
+  Inject,
   OnDestroy,
   OnInit,
   Optional,
@@ -68,9 +69,12 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     @Optional() private analyticService: GoogleAnalyticsService,
-    @Optional() private metadataService: MetadataService
+    @Optional() private metadataService: MetadataService,
+    @Inject(DOCUMENT) private document: Document
   ) {
     // this.filteredStreets = of(this.streets);
+    console.log(this.document.location);
+    console.log(this.document.location.origin);
   }
 
   public ngOnInit(): void {
