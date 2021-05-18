@@ -74,7 +74,6 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     if (this.metadataService) {
-      console.log('mandaron el metadata service');
       this.metadataService.updateMetadata({
         title: 'Todas las Farmacias',
         description:
@@ -126,6 +125,9 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
         this.sortProducts(products);
         this.products = products;
 
+        console.log(products[0]);
+        console.log(products[0].price);
+        console.log(products[0].image);
         if (this.metadataService && products.length > 0) {
           console.log('mandaron el metadata service');
           this.metadataService.updateMetadata({
