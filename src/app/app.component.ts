@@ -1,8 +1,6 @@
-import { DOCUMENT, Location } from '@angular/common';
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
-import { SEOService } from './seo.service';
 import { SearchService } from './shared/search.service';
 declare let gtag: Function;
 declare let fbq: Function;
@@ -17,13 +15,8 @@ export class AppComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private searchService: SearchService,
-    private seoService: SEOService,
-    private location: Location,
-    @Inject(DOCUMENT) private document: Document
-  ) {
-    console.log(this.document.URL);
-  }
+    private searchService: SearchService
+  ) {}
 
   public ngOnInit(): void {
     // this.location.subscribe((url) => {

@@ -125,11 +125,7 @@ export class ResultsPageComponent implements OnInit, OnDestroy {
         this.sortProducts(products);
         this.products = products;
 
-        console.log(products[0]);
-        console.log(products[0].price);
-        console.log(products[0].image);
         if (this.metadataService && products.length > 0) {
-          console.log('mandaron el metadata service');
           this.metadataService.updateMetadata({
             title: 'Todas las Farmacias',
             description: `Para este producto encuentre precios desde ${this.products[0].price}`,

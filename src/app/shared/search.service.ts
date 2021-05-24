@@ -61,7 +61,6 @@ export class SearchService {
     const tempProducts: Product[] = [];
 
     if (this.products.length <= 24) {
-      console.log('change');
       this.products$.next([...this.products]);
       return;
     }
@@ -70,7 +69,6 @@ export class SearchService {
       tempProducts.push(this.products[counter]);
       counter++;
     }
-    console.log('change');
     this.products$.next([...tempProducts]);
   }
 
@@ -115,7 +113,6 @@ export class SearchService {
     this.filteredProducts = this.sortProducts(tempProducts, true);
 
     if (this.filteredProducts.length <= 24) {
-      console.log('change');
       this.products$.next([...this.filteredProducts]);
     } else {
       const paginatedFilteredProducts = [];
@@ -130,7 +127,6 @@ export class SearchService {
         paginatedFilteredProducts.push(this.filteredProducts[counter]);
         counter++;
       }
-      console.log('change');
       this.products$.next([...(paginatedFilteredProducts as [])]);
     }
   }
@@ -279,7 +275,6 @@ export class SearchService {
   }
 
   public fetchProducts(userInput: string, vendorNames?: []): void {
-    console.log(`Fetch with ${userInput}`);
     this.authServise.autoLogin();
     this.products = [];
     this.products$.next([]);
@@ -287,7 +282,6 @@ export class SearchService {
     this.isLoadingSuject.next(true);
     this.userInput = userInput;
     this.authServise.getToken().subscribe((token) => {
-      console.log('sub del token');
       if (!token) return;
 
       this.searchData = {
@@ -321,15 +315,12 @@ export class SearchService {
                 paginatedProducts.push(this.products[counter]);
                 counter++;
               }
-              console.log('change');
               this.products$.next(paginatedProducts);
             } else {
-              console.log('change');
               this.products$.next(this.products);
             }
           },
           (error) => {
-            // console.log(error);
             this.isLoadingSuject.next(false);
             if (error.status === 404) {
               this.http
@@ -341,8 +332,6 @@ export class SearchService {
                   }
                 )
                 .subscribe((result) => {
-                  console.log('llego de borrar el medicine');
-                  console.log('change');
                   this.products$.next([]);
                 });
             }

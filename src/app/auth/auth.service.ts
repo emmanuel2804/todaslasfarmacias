@@ -15,7 +15,6 @@ export class AuthService {
   public autoLogin(): void {
     this.token$.asObservable().subscribe((token) => {
       if (!token) {
-        console.log(token);
         this.fetchClientKey();
       }
     });
